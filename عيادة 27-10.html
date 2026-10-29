@@ -1,0 +1,3707 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عيادة د. راما سفقلو | استشارات التغذية العلاجية وتنسيق القوام</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#E39E8B">
+  <meta name="description" content="تطبيق عيادة د. راما سفقلو للتغذية العلاجية، علاج السمنة والنحافة وتنسيق القوام للسيدات والفتيات">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Dr. Rama Clinic">
+  
+  <!-- PWA Manifest Link -->
+  <link rel="manifest" href="./manifest.json">
+  
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#E39E8B',      // Rose Peach
+              hover: '#D28671',        // Deep Warm Rose
+              secondary: '#F6D7DB',    // Soft Petal Pink
+              accent: '#E3ABAF',       // Dusty Rose Accent
+              bg: '#FAF0F2',          // Ultra Light Warm Pink Background
+              card: '#FFFFFF',        // Pure white card
+              dark: '#2B0914',        // Deep plum text
+              subtext: '#683648',     // Muted plum text
+              border: '#E3ABAF',      // Border accent
+              success: '#10B981',
+              warning: '#F59E0B'
+            }
+          },
+          fontFamily: {
+            sans: ['Cairo', 'Tajawal', 'sans-serif'],
+            heading: ['Tajawal', 'Cairo', 'sans-serif']
+          },
+          boxShadow: {
+            'soft': '0 10px 25px -5px rgba(227, 158, 139, 0.12), 0 8px 10px -6px rgba(227, 158, 139, 0.06)',
+            'glow': '0 0 20px rgba(227, 158, 139, 0.3)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background-color: #FAF0F2;
+      color: #2B0914;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF0F2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E3ABAF;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #E39E8B;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-diet-plan, #printable-diet-plan * {
+        visibility: visible;
+      }
+      #printable-diet-plan {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        background: white !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#FAF0F2] text-brand-dark selection:bg-brand-secondary selection:text-brand-dark">
+
+  <!-- ================= SHIELD / LOGIN GATEWAY (بوابة تسجيل الدخول) ================= -->
+  <div id="auth-gateway" class="fixed inset-0 z-50 bg-[#FAF0F2] flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 border border-brand-border shadow-2xl space-y-6 animate-in fade-in zoom-in-95">
+      
+      <!-- الشعار والترحيب -->
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 rounded-2xl mx-auto border border-brand-accent p-1 bg-brand-secondary flex items-center justify-center text-brand-dark font-black text-2xl shadow-soft">
+          د.ر
+        </div>
+        <h2 class="text-xl font-bold font-heading text-brand-dark">منصة عيادة د. راما سفقلو</h2>
+        <p class="text-xs text-brand-subtext">التغذية العلاجية، علاج السمنة والنحافة وتنسيق القوام</p>
+      </div>
+
+      <!-- أزرار اختيار نوع الحساب -->
+      <div class="flex bg-brand-secondary/70 p-1 rounded-2xl border border-brand-accent/40 text-xs font-bold">
+        <button id="auth-tab-patient" class="flex-1 py-2.5 rounded-xl transition-all bg-brand-primary text-white shadow-xs flex items-center justify-center gap-1.5">
+          <i data-lucide="heart" class="w-4 h-4"></i>
+          <span>دخول مشتركة</span>
+        </button>
+        <button id="auth-tab-doctor" class="flex-1 py-2.5 rounded-xl transition-all text-brand-subtext hover:text-brand-primary flex items-center justify-center gap-1.5">
+          <i data-lucide="stethoscope" class="w-4 h-4"></i>
+          <span>دخول الطبيبة</span>
+        </button>
+      </div>
+
+      <!-- نموذج دخول المشتركة -->
+      <div id="form-patient-login" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">رقم الموبايل المسجل بالعيادة</label>
+          <div class="relative">
+            <input id="login-patient-phone" type="tel" value="01012345678" placeholder="010XXXXXXXX" class="w-full bg-brand-bg border border-brand-border rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+            <span class="absolute left-3 top-2.5 text-xs font-bold text-brand-subtext">🇪🇬 مصر</span>
+          </div>
+          <p class="text-[11px] text-brand-subtext mt-1">للتجربة: يمكنكِ استخدام الرقم التجريبي <strong>01012345678</strong> أو رقم أي مشتركة مسجلة.</p>
+        </div>
+        <button id="btn-submit-patient-login" class="w-full bg-brand-primary hover:bg-brand-hover text-white py-3 rounded-xl text-xs sm:text-sm font-bold shadow-soft transition-all flex items-center justify-center gap-2">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>الدخول إلى ملفي الصحي</span>
+        </button>
+      </div>
+
+      <!-- نموذج دخول الطبيبة -->
+      <div id="form-doctor-login" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">البريد الإلكتروني للعيادة</label>
+          <input id="login-doctor-email" type="email" value="dr.rama@clinic.com" class="w-full bg-brand-bg border border-brand-border rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">رمز الأمان السريري (PIN / كلمة المرور)</label>
+          <input id="login-doctor-pin" type="password" value="123456" placeholder="أدخلي رمز المرور" class="w-full bg-brand-bg border border-brand-border rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+          <p class="text-[11px] text-brand-subtext mt-1">الرمز التجريبي الافتراضي: <strong>123456</strong></p>
+        </div>
+        <button id="btn-submit-doctor-login" class="w-full bg-brand-dark hover:bg-black text-white py-3 rounded-xl text-xs sm:text-sm font-bold shadow-soft transition-all flex items-center justify-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-brand-primary"></i>
+          <span>الدخول إلى لوحة التحكم السريرية</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= TOP APP BAR ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border/60 shadow-xs transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Clinic Branding & Logo -->
+        <div class="flex items-center gap-3">
+          <div class="relative w-12 h-12 rounded-2xl overflow-hidden shadow-xs border border-brand-accent/40 bg-brand-secondary flex-shrink-0 flex items-center justify-center text-brand-dark font-black text-xl">
+            د.ر
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg sm:text-xl font-bold font-heading text-brand-dark tracking-tight">د. راما سفقلو</h1>
+              <span class="bg-brand-secondary text-brand-dark text-[11px] font-semibold px-2 py-0.5 rounded-full border border-brand-accent/50 flex items-center gap-1">
+                <i data-lucide="sparkles" class="w-3 h-3 text-brand-primary"></i> كلينك سيدات
+              </span>
+            </div>
+            <p class="text-xs text-brand-subtext font-medium hidden sm:block">استشارية التغذية العلاجية وتنسيق القوام | متابعة هجينة</p>
+          </div>
+        </div>
+
+        <!-- Navigation Persona Switcher & Actions -->
+        <div class="flex items-center gap-2">
+          
+          <!-- Cloud Sync Indicator -->
+          <div id="cloud-sync-status" class="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>سحابي متصل</span>
+          </div>
+
+          <!-- Cart Toggle Button -->
+          <button id="btn-open-cart" class="relative bg-white hover:bg-brand-secondary text-brand-dark border border-brand-accent p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5" title="سلة المشتريات">
+            <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-primary"></i>
+            <span class="hidden sm:inline">السلة</span>
+            <span id="header-cart-badge" class="bg-brand-primary text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center -mr-1">0</span>
+          </button>
+
+          <!-- شريط المستخدم النشط وزر تسجيل الخروج -->
+          <div id="auth-user-bar" class="flex items-center gap-2">
+            <!-- شارة المستخدم النشط -->
+            <div id="user-badge-container" class="hidden sm:flex items-center gap-2 bg-brand-secondary/80 px-3 py-1.5 rounded-2xl border border-brand-accent/50 text-xs font-bold text-brand-dark">
+              <span id="user-role-icon">🌸</span>
+              <span id="user-display-name">سارة الأحمد</span>
+              <span id="user-role-label" class="bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">مشتركة</span>
+            </div>
+
+            <!-- زر تسجيل الخروج -->
+            <button id="btn-logout" class="bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5" title="تسجيل الخروج">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span class="hidden sm:inline">خروج</span>
+            </button>
+          </div>
+
+          <!-- PWA Install Button -->
+          <button id="pwa-install-btn" class="hidden sm:flex items-center gap-1.5 bg-white border border-brand-accent text-brand-dark hover:bg-brand-secondary px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-brand-primary"></i>
+            <span>تثبيت PWA</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Notice Banner -->
+  <div id="pwa-banner" class="bg-gradient-to-r from-brand-primary to-brand-hover text-white text-xs font-medium py-1.5 px-4 text-center flex items-center justify-center gap-2 shadow-xs">
+    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+    <span>مرحباً بكِ في منصة عيادة د. راما سفقلو | المتابعة الهجينة وتنسيق القوام للسيدات 🌸</span>
+  </div>
+
+  <!-- ================= MAIN CONTENT CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ============================================================== -->
+    <!-- VIEW 1: PATIENT PORTAL (بوابة المشتركة)                       -->
+    <!-- ============================================================== -->
+    <div id="view-patient" class="view-panel space-y-6">
+
+      <!-- Patient Header Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-secondary via-white to-[#FCEBED] border border-brand-border p-6 sm:p-8 shadow-soft">
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-brand-accent text-brand-dark text-xs font-bold">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-primary"></i> أهلاً بكِ، <span id="hero-patient-name">سارة الأحمد</span> 🌸
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight font-heading">
+              أسبوعكِ نحو الرشاقة وتنسيق القوام ✨
+            </h2>
+            <p class="text-brand-subtext text-sm sm:text-base leading-relaxed">
+              خطة المتابعة الهجينة نشطة ومزامنة سحابياً مع العيادة. فحص الـ InBody القادم متاح بملفك.
+            </p>
+            <div class="pt-2 flex flex-wrap gap-2 text-xs font-semibold">
+              <span class="bg-white px-3 py-1 rounded-lg border border-brand-border text-brand-dark flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="scale" class="w-3.5 h-3.5 text-brand-primary"></i> الوزن الحالي: <strong id="hero-current-weight">66.4</strong> كجم
+              </span>
+              <span class="bg-white px-3 py-1 rounded-lg border border-brand-border text-brand-dark flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="trending-down" class="w-3.5 h-3.5 text-emerald-600"></i> إجمالي النزول: -3.8 كجم
+              </span>
+              <span class="bg-white px-3 py-1 rounded-lg border border-brand-border text-brand-dark flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="target" class="w-3.5 h-3.5 text-brand-primary"></i> الهدف: <span id="hero-target-weight">60.0</span> كجم
+              </span>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-col sm:flex-row md:flex-col gap-2.5 flex-shrink-0">
+            <button id="btn-quick-new-measure" class="bg-brand-primary hover:bg-brand-hover text-white px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-soft transition-all flex items-center justify-center gap-2">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>تسجيل قياس أسبوعي</span>
+            </button>
+            <button id="btn-quick-consult" class="bg-white hover:bg-brand-secondary text-brand-dark border border-brand-accent px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-xs transition-all flex items-center justify-center gap-2">
+              <i data-lucide="message-circle" class="w-4 h-4 text-brand-primary"></i>
+              <span>محادثة د. راما</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient Navigation Sub-Tabs -->
+      <div class="flex items-center overflow-x-auto pb-1 gap-2 border-b border-brand-border/60">
+        <button class="patient-subtab active-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 bg-brand-primary text-white shadow-xs" data-target="tab-inbody">
+          <i data-lucide="activity" class="w-4 h-4"></i>
+          <span>متابعة InBody والقياسات</span>
+        </button>
+        <button class="patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="tab-diet">
+          <i data-lucide="utensils" class="w-4 h-4"></i>
+          <span>خطة الوجبات ومولد البدائل</span>
+        </button>
+        <button class="patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="tab-habits">
+          <i data-lucide="droplets" class="w-4 h-4"></i>
+          <span>مفكرة الالتزام والماء</span>
+        </button>
+        <button class="patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="tab-recipes">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          <span>مكتبة الوصفات الصحية</span>
+        </button>
+        <button class="patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary relative" data-target="tab-store">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span>متجر العيادة والمكملات</span>
+          <span class="bg-brand-primary text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold">مصر 🇪🇬</span>
+        </button>
+        <button class="patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="tab-chat">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>استشارة Telehealth</span>
+        </button>
+        <button class="patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="tab-bookings">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>المواعيد والباقات</span>
+        </button>
+      </div>
+
+      <!-- SUB-TAB 1: INBODY & ANALYTICS -->
+      <div id="tab-inbody" class="patient-content-pane space-y-6">
+        
+        <!-- Summary Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-3xl border border-brand-border shadow-soft flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-brand-subtext">الوزن الحالي</p>
+              <h3 id="metric-current-weight" class="text-2xl font-extrabold text-brand-dark mt-1">66.4 <span class="text-xs font-normal text-brand-subtext">كجم</span></h3>
+              <p class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5">
+                <i data-lucide="arrow-down-right" class="w-3 h-3"></i> متزامن سحابياً
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-brand-secondary flex items-center justify-center text-brand-primary">
+              <i data-lucide="scale" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl border border-brand-border shadow-soft flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-brand-subtext">نسبة الدهون (Body Fat)</p>
+              <h3 id="metric-body-fat" class="text-2xl font-extrabold text-brand-dark mt-1">26.8 <span class="text-xs font-normal text-brand-subtext">%</span></h3>
+              <p class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5">
+                <i data-lucide="arrow-down-right" class="w-3 h-3"></i> -3.2% منذ البداية
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-[#FFE8EE] flex items-center justify-center text-brand-primary">
+              <i data-lucide="pie-chart" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl border border-brand-border shadow-soft flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-brand-subtext">الكتلة العضلية (SMM)</p>
+              <h3 id="metric-muscle-mass" class="text-2xl font-extrabold text-brand-dark mt-1">24.2 <span class="text-xs font-normal text-brand-subtext">كجم</span></h3>
+              <p class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5">
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i> ثبات ممتاز (+0.3)
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-brand-secondary flex items-center justify-center text-brand-primary">
+              <i data-lucide="dumbbell" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl border border-brand-border shadow-soft flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-brand-subtext">محيط الخصر</p>
+              <h3 id="metric-waist" class="text-2xl font-extrabold text-brand-dark mt-1">74.5 <span class="text-xs font-normal text-brand-subtext">سم</span></h3>
+              <p class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5">
+                <i data-lucide="sparkles" class="w-3 h-3"></i> -5.5 سم نحت وتناسق
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-[#FFE8EE] flex items-center justify-center text-brand-primary">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Chart Card -->
+        <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-soft space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-brand-dark font-heading">لوحة متابعة تطور القياسات التفاعلية</h3>
+              <p class="text-xs text-brand-subtext">تتبع مسار نزول الوزن ونسبة الدهون والكتلة العضلية أسبوعياً</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex bg-brand-secondary/60 p-1 rounded-2xl text-xs font-bold">
+                <button id="chart-filter-weight" class="chart-filter-btn px-3 py-1.5 rounded-xl bg-brand-primary text-white shadow-xs">الوزن (كجم)</button>
+                <button id="chart-filter-fat" class="chart-filter-btn px-3 py-1.5 rounded-xl text-brand-subtext hover:text-brand-primary">نسبة الدهون (%)</button>
+                <button id="chart-filter-muscle" class="chart-filter-btn px-3 py-1.5 rounded-xl text-brand-subtext hover:text-brand-primary">الكتلة العضلية</button>
+              </div>
+              <button id="btn-open-inbody-modal" class="bg-brand-secondary hover:bg-brand-accent text-brand-dark p-2 rounded-xl text-xs font-bold transition-all" title="إضافة قياس جديد">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chart Canvas Container -->
+          <div class="relative h-72 sm:h-80 w-full pt-2">
+            <canvas id="inbodyProgressChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Medical Records & Uploads -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 bg-white p-6 rounded-3xl border border-brand-border shadow-soft space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h4 class="font-bold text-sm text-brand-dark flex items-center gap-2">
+                <i data-lucide="file-text" class="w-4 h-4 text-brand-primary"></i> تقارير InBody والتحاليل المرفوعة
+              </h4>
+              <div class="flex items-center gap-2">
+                <input type="file" id="real-file-input" class="hidden" accept=".pdf,image/*">
+                <button id="btn-upload-report" class="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1">
+                  <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> رفع تقرير جديد
+                </button>
+              </div>
+            </div>
+
+            <div id="patient-files-container" class="space-y-2.5">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Clinical Notes from Dr. Rama -->
+          <div class="bg-gradient-to-br from-[#FFF0F4] to-white p-6 rounded-3xl border border-brand-border shadow-soft flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2 text-brand-primary">
+                <i data-lucide="quote" class="w-5 h-5"></i>
+                <h4 class="font-bold text-sm text-brand-dark font-heading">ملاحظة د. راما التوجيهية</h4>
+              </div>
+              <p class="text-xs text-brand-subtext leading-relaxed">
+                "معدل نزول الدهون لديكِ رائع جداً (3.2% نزول حقيقي دون خسارة عضلية). التزامكِ ببدائل البروتين ساهم في حيوية بشرتك وثبات قياسات الخصر. استمري على نفس خطة البدائل الذكية."
+              </p>
+            </div>
+            <div class="pt-4 border-t border-brand-border/60 flex items-center gap-3 mt-4">
+              <div class="w-9 h-9 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-xs">
+                د.ر
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-dark">د. راما سفقلو</p>
+                <p class="text-[10px] text-brand-subtext">استشارية التغذية العلاجية</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUB-TAB 2: DIET PLAN & FOOD EXCHANGE SYSTEM -->
+      <div id="tab-diet" class="patient-content-pane hidden space-y-6">
+
+        <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-soft">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-border/60">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-brand-dark font-heading">الخطة الغذائية اليومية المصممة</h3>
+                <span class="bg-brand-secondary text-brand-dark text-xs px-2.5 py-0.5 rounded-full font-bold">باقة تنسيق القوام</span>
+              </div>
+              <p class="text-xs text-brand-subtext mt-0.5">محسوبة بنظام العجز الصحي مع نظام البدائل المتكافئة</p>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button id="btn-open-grocery-list" class="bg-white hover:bg-brand-secondary text-brand-dark border border-brand-accent px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-xs">
+                <i data-lucide="shopping-cart" class="w-4 h-4 text-brand-primary"></i>
+                <span>قائمة مشتريات الأسبوع 🛒</span>
+              </button>
+              <button id="btn-print-diet-plan" class="bg-brand-secondary hover:bg-brand-accent text-brand-dark px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-brand-accent/50 shadow-xs">
+                <i data-lucide="printer" class="w-4 h-4 text-brand-primary"></i>
+                <span>تصدير وطباعة الخطة PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+            <div class="p-3 rounded-2xl bg-brand-bg border border-brand-border/50 text-center">
+              <span class="text-[11px] text-brand-subtext font-semibold">إجمالي السعرات</span>
+              <p id="diet-total-cals" class="text-xl font-black text-brand-dark mt-0.5">1,280</p>
+              <span class="text-[10px] text-brand-primary font-bold">سعرة حرارية</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-brand-bg border border-brand-border/50 text-center">
+              <span class="text-[11px] text-brand-subtext font-semibold">البروتين المستهدف</span>
+              <p id="diet-total-protein" class="text-xl font-black text-brand-dark mt-0.5">96 <span class="text-xs font-normal">جم</span></p>
+              <span class="text-[10px] text-brand-primary font-bold">30% من الطاقة</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-brand-bg border border-brand-border/50 text-center">
+              <span class="text-[11px] text-brand-subtext font-semibold">الكربوهيدرات المعقدة</span>
+              <p id="diet-total-carbs" class="text-xl font-black text-brand-dark mt-0.5">128 <span class="text-xs font-normal">جم</span></p>
+              <span class="text-[10px] text-brand-subtext font-bold">40% من الطاقة</span>
+            </div>
+            <div class="p-3 rounded-2xl bg-brand-bg border border-brand-border/50 text-center">
+              <span class="text-[11px] text-brand-subtext font-semibold">الدهون الصحية</span>
+              <p id="diet-total-fats" class="text-xl font-black text-brand-dark mt-0.5">43 <span class="text-xs font-normal">جم</span></p>
+              <span class="text-[10px] text-brand-subtext font-bold">30% من الطاقة</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meals Container -->
+        <div id="meals-list-container" class="space-y-4">
+          <!-- Rendered dynamically via JS -->
+        </div>
+
+      </div>
+
+      <!-- SUB-TAB 3: DAILY HABITS & WATER TRACKER -->
+      <div id="tab-habits" class="patient-content-pane hidden space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Water Hydration Card -->
+          <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-soft flex flex-col justify-between space-y-6">
+            <div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-9 h-9 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center">
+                    <i data-lucide="droplet" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">عداد شرب الماء اليومي</h4>
+                    <p class="text-xs text-brand-subtext">الهدف اليومي: 2,500 مل (10 أكواب)</p>
+                  </div>
+                </div>
+                <span id="water-percent-badge" class="text-xs font-black text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
+                  60%
+                </span>
+              </div>
+
+              <!-- Animated Water Container Progress -->
+              <div class="mt-6">
+                <div class="flex items-baseline justify-between mb-2">
+                  <span id="water-current-amount" class="text-3xl font-black text-brand-dark">1,500 <span class="text-sm font-normal text-brand-subtext">مل</span></span>
+                  <span id="water-remaining-label" class="text-xs text-brand-subtext font-medium">متبقي 1,000 مل للهدف</span>
+                </div>
+                <div class="w-full bg-brand-secondary/60 h-5 rounded-full overflow-hidden p-0.5 border border-brand-border">
+                  <div id="water-progress-bar" class="bg-gradient-to-r from-sky-400 to-sky-500 h-full rounded-full transition-all duration-500" style="width: 60%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Add Water Buttons -->
+            <div class="space-y-2 pt-2">
+              <p class="text-[11px] font-bold text-brand-subtext">إضافة سريعة لكوب ماء:</p>
+              <div class="grid grid-cols-3 gap-2">
+                <button id="btn-add-water-250" class="bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center justify-center gap-1">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> 250 مل
+                </button>
+                <button id="btn-add-water-500" class="bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center justify-center gap-1">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> 500 مل
+                </button>
+                <button id="btn-reset-water" class="bg-brand-bg hover:bg-brand-secondary text-brand-subtext border border-brand-border py-2.5 rounded-2xl font-bold text-xs transition-all">
+                  إعادة ضبط
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food Diary & Daily Adherence -->
+          <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-soft flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-9 h-9 rounded-2xl bg-brand-secondary text-brand-primary flex items-center justify-center">
+                    <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">مفكرة الالتزام والوجبات</h4>
+                    <p class="text-xs text-brand-subtext">سجلي التزامك اليومي لتشجيع د. راما</p>
+                  </div>
+                </div>
+                <span id="habits-counter-badge" class="text-xs font-black text-brand-dark bg-brand-secondary px-2.5 py-1 rounded-full">
+                  3 من 4 وجبات مكتملة
+                </span>
+              </div>
+
+              <!-- Habit Checklist -->
+              <div class="mt-4 space-y-2.5">
+                <label class="flex items-center gap-3 p-2.5 rounded-xl bg-brand-bg hover:bg-brand-secondary/40 cursor-pointer transition-all border border-brand-border/40">
+                  <input type="checkbox" checked class="habit-check w-4 h-4 rounded text-brand-primary focus:ring-brand-primary accent-brand-primary">
+                  <span class="text-xs font-semibold text-brand-dark">وجبة الإفطار في موعدها (بدون تخطي)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl bg-brand-bg hover:bg-brand-secondary/40 cursor-pointer transition-all border border-brand-border/40">
+                  <input type="checkbox" checked class="habit-check w-4 h-4 rounded text-brand-primary focus:ring-brand-primary accent-brand-primary">
+                  <span class="text-xs font-semibold text-brand-dark">وجبة الغداء وفق الماكروز المحددة</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl bg-brand-bg hover:bg-brand-secondary/40 cursor-pointer transition-all border border-brand-border/40">
+                  <input type="checkbox" checked class="habit-check w-4 h-4 rounded text-brand-primary focus:ring-brand-primary accent-brand-primary">
+                  <span class="text-xs font-semibold text-brand-dark">مشي خفيف أو نشاط حركي (45 دقيقة)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl bg-brand-bg hover:bg-brand-secondary/40 cursor-pointer transition-all border border-brand-border/40">
+                  <input type="checkbox" id="check-dinner" class="habit-check w-4 h-4 rounded text-brand-primary focus:ring-brand-primary accent-brand-primary">
+                  <span class="text-xs font-semibold text-brand-dark">وجبة العشاء الخفيفة والتوقف عن الأكل قبل النوم بساعتين</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Add Note -->
+            <div class="pt-2">
+              <div class="flex gap-2">
+                <input id="input-diary-note" type="text" placeholder="ملاحظتك اليومية (مثال: شعرت بنشاط عالي اليوم...)" class="flex-1 bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs text-brand-dark focus:outline-none focus:border-brand-primary">
+                <button id="btn-save-diary" class="bg-brand-primary hover:bg-brand-hover text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs">
+                  حفظ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUB-TAB 4: HEALTHY RECIPES LIBRARY -->
+      <div id="tab-recipes" class="patient-content-pane hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-brand-dark font-heading">مكتبة الوصفات الصحية المعتمدة</h3>
+            <p class="text-xs text-brand-subtext">وصفات لذيذة ومحسوبة السعرات تلائم برامج تنسيق القوام وتنشيط الحرق</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="recipe-filter active px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-xs" data-category="all">الكل</button>
+            <button class="recipe-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary" data-category="high-protein">عالية البروتين</button>
+            <button class="recipe-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary" data-category="snacks">سناكس صحي</button>
+          </div>
+        </div>
+
+        <div id="recipes-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- SUB-TAB 5: CLINIC BOUTIQUE / STORE (متجر العيادة والمكملات - مصر 🇪🇬) -->
+      <div id="tab-store" class="patient-content-pane hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-bold text-brand-dark font-heading">متجر العيادة والمكملات المعتمدة</h3>
+              <span class="bg-brand-secondary text-brand-dark text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-brand-accent/40">توصيل لكافة المحافظات 🇪🇬</span>
+            </div>
+            <p class="text-xs text-brand-subtext">منتجات مختارة بعناية لدعم خطتك في نحت القوام، شد الترهلات ونضارة البشرة مع توفر خيارات الدفع المحلية في مصر</p>
+          </div>
+          
+          <!-- Category Filter Buttons -->
+          <div class="flex flex-wrap gap-2">
+            <button class="store-filter active px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-xs" data-category="all">الكل</button>
+            <button class="store-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary" data-category="supplements">مكملات ونضارة</button>
+            <button class="store-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary" data-category="tools">أجهزة ومقاسات</button>
+            <button class="store-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary" data-category="foods">أغذية صحية</button>
+          </div>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div id="store-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- SUB-TAB 6: TELEHEALTH CHAT -->
+      <div id="tab-chat" class="patient-content-pane hidden space-y-6">
+        <div class="bg-white rounded-3xl border border-brand-border shadow-soft overflow-hidden flex flex-col h-[520px]">
+          <div class="bg-gradient-to-r from-brand-secondary/80 to-white p-4 border-b border-brand-border/60 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="relative w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                د.ر
+                <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-brand-dark">د. راما سفقلو (استشارة مباشرة)</h4>
+                <p class="text-[11px] text-emerald-600 font-medium">متصلة الآن | مزامنة سحابية مباشرة</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-white text-brand-dark font-bold px-3 py-1 rounded-xl border border-brand-accent/40">
+                باقة المتابعة الهجينة
+              </span>
+            </div>
+          </div>
+
+          <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-brand-bg/50">
+            <!-- Messages rendered via JS -->
+          </div>
+
+          <!-- Hidden Input for Chat File Attachments -->
+          <input type="file" id="chat-file-input" class="hidden" accept="image/*,.pdf">
+
+          <!-- Chat Input Bar -->
+          <div class="p-3 bg-white border-t border-brand-border/60 flex items-center gap-2">
+            <button id="btn-chat-mic" class="p-2.5 rounded-xl text-brand-subtext hover:text-brand-primary hover:bg-brand-secondary transition-all" title="تسجيل صوتي">
+              <i data-lucide="mic" class="w-5 h-5"></i>
+            </button>
+            <button id="btn-chat-attach" class="p-2.5 rounded-xl text-brand-subtext hover:text-brand-primary hover:bg-brand-secondary transition-all" title="إرفاق صورة أو تحليل">
+              <i data-lucide="paperclip" class="w-5 h-5"></i>
+            </button>
+            <input id="chat-input-text" type="text" placeholder="اكتبي استفسارك لدكتورة راما..." class="flex-1 bg-brand-bg border border-brand-border rounded-xl px-4 py-2.5 text-xs sm:text-sm text-brand-dark focus:outline-none focus:border-brand-primary">
+            <button id="btn-chat-send" class="bg-brand-primary hover:bg-brand-hover text-white p-2.5 rounded-xl transition-all shadow-xs">
+              <i data-lucide="send" class="w-5 h-5 rtl:rotate-180"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-TAB 7: BOOKINGS & PACKAGES -->
+      <div id="tab-bookings" class="patient-content-pane hidden space-y-6">
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <h3 class="text-lg font-bold text-brand-dark font-heading">باقات العيادة وجدول المواعيد</h3>
+            <span class="bg-brand-secondary text-brand-dark text-xs font-bold px-2.5 py-0.5 rounded-full">الأسعار بالجنيه المصري (EGP)</span>
+          </div>
+          <p class="text-xs text-brand-subtext">اختاري الباقة المناسبة لأهدافك أو حددي موعد استشارتك القادمة داخل العيادة مع إمكانية الدفع عبر إنستاباي أو المحافظ</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-3xl border border-brand-border p-6 shadow-soft space-y-4 relative flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="text-xs font-bold text-brand-dark bg-brand-secondary px-3 py-1 rounded-full">استشارة رقمية</span>
+              <h4 class="text-lg font-bold text-brand-dark">باقة الرشاقة الشهرية (أونلاين)</h4>
+              <p class="text-xs text-brand-subtext">متابعة تغذية أسبوعية عن بعد تناسب السيدات داخل وخارج القاهرة والجيزة.</p>
+              <div class="text-2xl font-black text-brand-dark pt-2">
+                1,450 <span class="text-xs font-normal text-brand-subtext">ج.م / شهرياً</span>
+              </div>
+              <ul class="text-xs text-brand-subtext space-y-2 pt-2 border-t border-brand-border/60">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> خطة غذائية أسبوعية متجددة</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> استخدام كامل لمولد البدائل الذكي</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> محادثة واستشارات نصية وصوتية عبر التطبيق</li>
+              </ul>
+            </div>
+            <button class="btn-book-package w-full bg-brand-secondary hover:bg-brand-accent text-brand-dark font-bold py-2.5 rounded-xl text-xs transition-all border border-brand-accent/50" data-package="online" data-price="1450" data-name="باقة الرشاقة الشهرية (أونلاين)">
+              حجز الباقة الآن
+            </button>
+          </div>
+
+          <div class="bg-white rounded-3xl border-2 border-brand-primary p-6 shadow-soft space-y-4 relative flex flex-col justify-between">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-primary text-white text-[11px] font-bold px-3 py-0.5 rounded-full shadow-xs">
+              الأكثر طلباً وتفضيلاً 🌟
+            </div>
+            <div class="space-y-3">
+              <span class="text-xs font-bold text-brand-dark bg-brand-secondary px-3 py-1 rounded-full">نظام هجين متكامل</span>
+              <h4 class="text-lg font-bold text-brand-dark">باقة المتابعة الهجينة (عيادة + أونلاين)</h4>
+              <p class="text-xs text-brand-subtext">كشف سريري وفحص InBody بالعيادة كل أسبوعين + متابعة رقمية يومية مستمرة.</p>
+              <div class="text-2xl font-black text-brand-dark pt-2">
+                2,400 <span class="text-xs font-normal text-brand-subtext">ج.م / شهرياً</span>
+              </div>
+              <ul class="text-xs text-brand-subtext space-y-2 pt-2 border-t border-brand-border/60">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary"></i> جلستان كشف InBody دقيقة بالعيادة</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary"></i> متابعة قياسات الخصر وتنسيق القوام</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary"></i> تواصل صوتي ومباشر مع د. راما</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary"></i> وصفات خاصة لتثبيت الوزن</li>
+              </ul>
+            </div>
+            <button class="btn-book-package w-full bg-brand-primary hover:bg-brand-hover text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-soft" data-package="hybrid" data-price="2400" data-name="باقة المتابعة الهجينة">
+              ترقية واشتراك فوري
+            </button>
+          </div>
+
+          <div class="bg-white rounded-3xl border border-brand-border p-6 shadow-soft space-y-4 relative flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="text-xs font-bold text-brand-dark bg-brand-secondary px-3 py-1 rounded-full">مكثفة للعرائس</span>
+              <h4 class="text-lg font-bold text-brand-dark">برنامج التحول وتنسيق القوام (3 أشهر)</h4>
+              <p class="text-xs text-brand-subtext">برنامج شامل مخصص لنحت القوام ومقاومة الأنسولين والتجهيز للمناسبات الكبرى.</p>
+              <div class="text-2xl font-black text-brand-dark pt-2">
+                5,900 <span class="text-xs font-normal text-brand-subtext">ج.م / 3 أشهر</span>
+              </div>
+              <ul class="text-xs text-brand-subtext space-y-2 pt-2 border-t border-brand-border/60">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> 6 جلسات فحص سريري ومقاسات</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> ملف طبي متكامل للتحاليل والهرمونات</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> دعم مخصص 24/7 مع إمكانية التقسيط عبر فاليو</li>
+              </ul>
+            </div>
+            <button class="btn-book-package w-full bg-brand-secondary hover:bg-brand-accent text-brand-dark font-bold py-2.5 rounded-xl text-xs transition-all border border-brand-accent/50" data-package="vip" data-price="5900" data-name="برنامج التحول وتنسيق القوام">
+              حجز الباقة الآن
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: DOCTOR / CLINICAL DASHBOARD (لوحة تحكم الطبيبة)        -->
+    <!-- ============================================================== -->
+    <div id="view-doctor" class="view-panel hidden space-y-6">
+
+      <!-- Doctor Dashboard Banner -->
+      <div class="rounded-3xl bg-white border border-brand-border p-6 shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-brand-secondary border border-brand-accent/50 flex items-center justify-center text-brand-primary flex-shrink-0">
+            <i data-lucide="stethoscope" class="w-7 h-7"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-bold font-heading text-brand-dark">لوحة التحكم السريرية | د. راما سفقلو</h2>
+              <span class="text-[10px] bg-brand-secondary text-brand-dark font-bold px-2 py-0.5 rounded-full">Doctor Admin</span>
+            </div>
+            <p class="text-xs text-brand-subtext mt-0.5">إدارة الملفات الطبية، حساب احتياجات الطاقة السريرية، وبناء الأنظمة الغذائية</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-doc-new-patient" class="bg-brand-primary hover:bg-brand-hover text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>إضافة مشتركة جديدة</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Doctor Sub-Tabs -->
+      <div class="flex items-center overflow-x-auto pb-1 gap-2 border-b border-brand-border/60">
+        <button class="doctor-subtab active-doc-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 bg-brand-primary text-white shadow-xs" data-target="doc-tab-calc">
+          <i data-lucide="calculator" class="w-4 h-4"></i>
+          <span>حاسبة التغذية السريرية (BMR / TDEE)</span>
+        </button>
+        <button class="doctor-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="doc-tab-patients">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>سجل المريضات وفحص InBody</span>
+        </button>
+        <button class="doctor-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary" data-target="doc-tab-builder">
+          <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+          <span>محرر الخطط وبدائل الأغذية</span>
+        </button>
+      </div>
+
+      <!-- DOC SUB-TAB 1: CLINICAL NUTRITION CALCULATOR -->
+      <div id="doc-tab-calc" class="doctor-content-pane space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Calculator Input Form -->
+          <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-brand-border shadow-soft space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+              <div class="flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-brand-primary"></i>
+                <h4 class="font-bold text-brand-dark text-sm sm:text-base font-heading">معادلة Mifflin-St Jeor السريرية لحساب الطاقة للإناث</h4>
+              </div>
+              <span class="text-[11px] text-brand-dark font-bold bg-brand-secondary px-2.5 py-0.5 rounded-full">محرك حي</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-brand-subtext mb-1">العمر (سنة)</label>
+                <input id="calc-age" type="number" value="28" min="14" max="75" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-subtext mb-1">الوزن الحالي (كجم)</label>
+                <input id="calc-weight" type="number" value="66.4" step="0.1" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-subtext mb-1">الطول (سم)</label>
+                <input id="calc-height" type="number" value="164" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-subtext mb-1">معامل النشاط البدني (PAL)</label>
+              <select id="calc-activity" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-primary">
+                <option value="1.2">خامل / مكتبي (قليل أو بدون نشاط رياضي) - PAL 1.2</option>
+                <option value="1.375" selected>نشاط خفيف (تمارين خفيفة 1-3 أيام أسبوعياً) - PAL 1.375</option>
+                <option value="1.55">نشاط متوسط (تمارين معتدلة 3-5 أيام أسبوعياً) - PAL 1.55</option>
+                <option value="1.725">نشاط عالي (تمارين مكثفة 6-7 أيام أسبوعياً) - PAL 1.725</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-subtext mb-1">الهدف السريري وتعديل السعرات</label>
+              <select id="calc-goal" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-primary">
+                <option value="-500" selected>خسارة دهون وتنسيق قوام (عجز صحي -500 سعرة)</option>
+                <option value="-300">نزول تدريجي بطيء / تثبيت (عجز خفيف -300 سعرة)</option>
+                <option value="0">تثبيت الوزن الحالي (بدون عجز 0 سعرة)</option>
+                <option value="300">علاج النحافة وزيادة كتلة عضلية (+300 سعرة)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-subtext mb-1">نموذج توزيع الماكروز (Macronutrient Split)</label>
+              <select id="calc-macro-preset" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-primary">
+                <option value="high-protein" selected>عالي البروتين لتنسيق القوام (30% بروتين | 40% كارب | 30% دهون)</option>
+                <option value="balanced">متوازن سريري (25% بروتين | 45% كارب | 30% دهون)</option>
+                <option value="low-carb">منخفض الكارب لمقاومة الأنسولين و PCOS (30% بروتين | 25% كارب | 45% دهون)</option>
+              </select>
+            </div>
+
+            <button id="btn-recalc" class="w-full bg-brand-primary hover:bg-brand-hover text-white py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-xs">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              <span>تحديث الحساب التلقائي</span>
+            </button>
+          </div>
+
+          <!-- Calculation Live Results Card -->
+          <div class="lg:col-span-5 bg-gradient-to-br from-white to-brand-bg p-6 rounded-3xl border border-brand-border shadow-soft flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+                <h4 class="font-bold text-brand-dark text-sm font-heading">النتائج السريرية الفورية للمشتركة</h4>
+                <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md">آمن صحياً</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white p-3.5 rounded-2xl border border-brand-border/70 text-center shadow-xs">
+                  <span class="text-[11px] text-brand-subtext font-semibold">معدل الأيض (BMR)</span>
+                  <p id="out-bmr" class="text-xl font-black text-brand-dark mt-0.5">1,389</p>
+                  <span class="text-[10px] text-brand-subtext font-medium">سعرة حرق أساسي</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-2xl border border-brand-border/70 text-center shadow-xs">
+                  <span class="text-[11px] text-brand-subtext font-semibold">الاحتياج الكلي (TDEE)</span>
+                  <p id="out-tdee" class="text-xl font-black text-brand-dark mt-0.5">1,910</p>
+                  <span class="text-[10px] text-brand-subtext font-medium">سعرة مع النشاط</span>
+                </div>
+              </div>
+
+              <div class="bg-brand-secondary/80 p-4 rounded-2xl border border-brand-accent/50 text-center">
+                <span class="text-xs text-brand-dark font-bold">السعرات الموصى بها في الخطة اليومية</span>
+                <p id="out-target-cals" class="text-3xl font-black text-brand-dark mt-1">1,410 <span class="text-xs font-normal text-brand-subtext">سعرة/يوم</span></p>
+                <p id="out-deficit-label" class="text-[11px] text-emerald-800 font-semibold mt-1">عجز صحي محسوب لخسارة ~0.5 كجم دهون أسبوعياً</p>
+              </div>
+
+              <div class="space-y-2 pt-1">
+                <span class="text-xs font-bold text-brand-dark block">توزيع الجرامات اليومية:</span>
+                
+                <div class="bg-white p-2.5 rounded-xl border border-brand-border/70 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-brand-primary"></span>
+                    <span class="font-bold text-brand-dark">بروتين (1.6 - 1.8g/كجم)</span>
+                  </div>
+                  <span id="out-protein-g" class="font-extrabold text-brand-dark">106 جم <span class="text-[10px] text-brand-subtext font-normal">(423 سعرة)</span></span>
+                </div>
+
+                <div class="bg-white p-2.5 rounded-xl border border-brand-border/70 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                    <span class="font-bold text-brand-dark">كربوهيدرات معقدة</span>
+                  </div>
+                  <span id="out-carbs-g" class="font-extrabold text-brand-dark">141 جم <span class="text-[10px] text-brand-subtext font-normal">(564 سعرة)</span></span>
+                </div>
+
+                <div class="bg-white p-2.5 rounded-xl border border-brand-border/70 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-sky-400"></span>
+                    <span class="font-bold text-brand-dark">دهون صحية</span>
+                  </div>
+                  <span id="out-fats-g" class="font-extrabold text-brand-dark">47 جم <span class="text-[10px] text-brand-subtext font-normal">(423 سعرة)</span></span>
+                </div>
+              </div>
+            </div>
+
+            <button id="btn-apply-calculated-plan" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs flex items-center justify-center gap-2">
+              <i data-lucide="check" class="w-4 h-4"></i>
+              <span>اعتماد وتطبيق الخطة سحابياً</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DOC SUB-TAB 2: PATIENTS LIST -->
+      <div id="doc-tab-patients" class="doctor-content-pane hidden space-y-4">
+        <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-soft space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+              <h4 class="font-bold text-brand-dark text-sm sm:text-base font-heading">قائمة المريضات المسجلات والمتابعة السريرية</h4>
+              <span id="patients-count-badge" class="bg-brand-secondary text-brand-dark text-[11px] font-bold px-2.5 py-0.5 rounded-full">3 مشتركات</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="input-patient-search" type="text" placeholder="بحث باسم المريضة أو الهاتف..." class="bg-brand-bg border border-brand-border rounded-xl px-3 py-1.5 text-xs text-brand-dark focus:outline-none focus:border-brand-primary w-44 sm:w-60">
+              <button id="btn-doc-new-patient-inline" class="bg-brand-secondary hover:bg-brand-accent text-brand-dark border border-brand-accent px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>مشتركة جديدة</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead>
+                <tr class="border-b border-brand-border text-brand-subtext font-bold">
+                  <th class="py-3 px-3">المريضة</th>
+                  <th class="py-3 px-3">نوع الباقة</th>
+                  <th class="py-3 px-3">الوزن الأولي / الحالي</th>
+                  <th class="py-3 px-3">الحالة الصحية</th>
+                  <th class="py-3 px-3">نسبة الالتزام</th>
+                  <th class="py-3 px-3 text-center">إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="patients-table-body" class="divide-y divide-brand-border/40 font-medium">
+                <!-- Rendered dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOC SUB-TAB 3: DIET BUILDER -->
+      <div id="doc-tab-builder" class="doctor-content-pane hidden space-y-4">
+        <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-soft space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-brand-border/60">
+            <div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="clipboard-edit" class="w-5 h-5 text-brand-primary"></i>
+                <h4 class="font-bold text-brand-dark text-base font-heading">محرر وجبات المشتركة السريري التفاعلي</h4>
+              </div>
+              <p class="text-xs text-brand-subtext mt-0.5">تعديل الوجبات والحصص ومزامنتها فورياً على قاعدة البيانات السحابية</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btn-builder-add-meal" class="bg-brand-secondary hover:bg-brand-accent text-brand-dark border border-brand-accent px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="plus" class="w-4 h-4 text-brand-primary"></i>
+                <span>إضافة وجبة جديدة</span>
+              </button>
+              <button id="btn-builder-save-plan" class="bg-brand-primary hover:bg-brand-hover text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-soft">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                <span>حفظ ومزامنة الخطة سحابياً</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Meals List in Builder -->
+          <div id="builder-meals-list" class="space-y-4">
+            <!-- Rendered dynamically via JS -->
+          </div>
+
+          <!-- Clinical Nutrition Exchange Tip -->
+          <div class="p-4 rounded-2xl bg-brand-bg border border-brand-border text-xs space-y-2">
+            <div class="font-bold text-brand-dark flex items-center gap-1.5">
+              <i data-lucide="info" class="w-4 h-4 text-brand-primary"></i> قاعدة التكافؤ الغذائي المطبقة بالعيادة:
+            </div>
+            <p class="text-brand-subtext leading-relaxed">
+              كل حصة بروتين لحوم قليلة الدهن (Lean Meat Exchange) = 7 جم بروتين، 3 جم دهون، 0 جم كربوهيدرات (~55 سعرة حرارية). يتم التبديل بناءً على ثبات جرامات البروتين مع تعويض فرق الدهون في حصة الزيت اليومية.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= MODALS & OVERLAYS ================= -->
+
+  <!-- Modal 1: Food Exchange Selector -->
+  <div id="modal-food-exchange" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-brand-secondary text-brand-primary flex items-center justify-center font-bold">
+            <i data-lucide="repeat" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-brand-dark text-base font-heading">مولد البدائل الغذائية المتكافئة</h3>
+        </div>
+        <button id="btn-close-exchange-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="bg-brand-bg p-3.5 rounded-2xl border border-brand-border/80">
+        <span class="text-[11px] text-brand-subtext font-semibold">الصنف الحالي في خطتك:</span>
+        <h4 id="exchange-current-item-name" class="font-extrabold text-brand-dark text-sm mt-0.5">صدر دجاج مشوي (150 جم)</h4>
+        <p id="exchange-current-macros" class="text-xs text-brand-dark font-bold mt-1">245 سعرة | 46g بروتين | 5g دهون</p>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-brand-dark">اختر البديل المفضل لديكِ (محسوب بنفس الماكروز):</label>
+        <div id="exchange-options-list" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+          <!-- Inserted dynamically via JS -->
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-brand-border/60">
+        <button id="btn-cancel-exchange" class="px-4 py-2 rounded-xl text-xs font-bold text-brand-subtext hover:bg-brand-bg">إلغاء</button>
+        <button id="btn-confirm-exchange" class="bg-brand-primary hover:bg-brand-hover text-white px-5 py-2 rounded-xl text-xs font-bold shadow-soft transition-all">تأكيد الاستبدال وتحديث الخطة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Log New Measurements -->
+  <div id="modal-new-measure" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <h3 class="font-bold text-brand-dark text-base font-heading">تسجيل قياس أسبوعي جديد (مزامنة سحابية)</h3>
+        <button id="btn-close-measure-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الوزن الجديد (كجم)</label>
+          <input id="input-new-weight" type="number" step="0.1" value="65.9" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">نسبة الدهون % (من فحص InBody أو الميزان)</label>
+          <input id="input-new-fat" type="number" step="0.1" value="26.3" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الكتلة العضلية (كجم)</label>
+          <input id="input-new-muscle" type="number" step="0.1" value="24.3" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">محيط الخصر (سم)</label>
+          <input id="input-new-waist" type="number" step="0.5" value="73.5" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-brand-border/60">
+        <button id="btn-cancel-measure" class="px-4 py-2 rounded-xl text-xs font-bold text-brand-subtext hover:bg-brand-bg">إلغاء</button>
+        <button id="btn-save-measure" class="bg-brand-primary hover:bg-brand-hover text-white px-5 py-2 rounded-xl text-xs font-bold shadow-soft transition-all">حفظ ومزامنة القياس</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: PWA Install -->
+  <div id="pwa-install-dialog" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 border border-brand-border shadow-2xl text-center space-y-4">
+      <div class="w-16 h-16 rounded-2xl mx-auto border border-brand-accent p-1 bg-brand-secondary flex items-center justify-center text-brand-dark font-black text-2xl">
+        د.ر
+      </div>
+      <div>
+        <h3 class="font-bold text-brand-dark text-base font-heading">تثبيت تطبيق د. راما سفقلو</h3>
+        <p class="text-xs text-brand-subtext mt-1">أضيفي التطبيق إلى شاشتك الرئيسية للوصول السريع بدون إنترنت والتنبيهات المباشرة لمواعيدك في العيادة.</p>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button id="btn-pwa-dismiss" class="flex-1 py-2.5 rounded-xl border border-brand-border text-xs font-bold text-brand-subtext">لاحقاً</button>
+        <button id="btn-pwa-confirm" class="flex-1 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-bold shadow-soft">تثبيت الآن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Add New Patient -->
+  <div id="modal-new-patient" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-brand-secondary text-brand-primary flex items-center justify-center font-bold">
+            <i data-lucide="user-plus" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-brand-dark text-base font-heading">إضافة مشتركة جديدة بالعيادة</h3>
+            <p class="text-[11px] text-brand-subtext">فتح ملف طبي جديد في سحابة العيادة</p>
+          </div>
+        </div>
+        <button id="btn-close-new-patient-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-brand-subtext mb-1">اسم المشتركة الكامل <span class="text-brand-primary">*</span></label>
+          <input id="new-pat-name" type="text" placeholder="مثال: ياسمين محمود" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3.5 py-2 text-xs sm:text-sm font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">رقم الموبايل / واتساب (مصر)</label>
+          <input id="new-pat-phone" type="tel" placeholder="010XXXXXXXX أو 011XXXXXXXX" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">العمر (سنة)</label>
+          <input id="new-pat-age" type="number" value="26" min="12" max="80" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الطول (سم)</label>
+          <input id="new-pat-height" type="number" value="162" min="130" max="200" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الوزن الابتدائي (كجم) <span class="text-brand-primary">*</span></label>
+          <input id="new-pat-weight" type="number" step="0.1" value="74.5" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الوزن المستهدف (كجم)</label>
+          <input id="new-pat-target" type="number" step="0.1" value="62.0" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الباقة المشتركة بها</label>
+          <select id="new-pat-package" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-primary">
+            <option value="hybrid" selected>هجين (عيادة + أونلاين)</option>
+            <option value="vip">باقة 3 أشهر عرائس</option>
+            <option value="online">أونلاين شهري</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-brand-subtext mb-1">الحالة الصحية / التشخيص السريري</label>
+          <select id="new-pat-condition" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-primary">
+            <option value="سليمة / نحت خصر">سليمة / تنسيق قوام ونحت خصر</option>
+            <option value="مقاومة أنسولين خفيفة" selected>مقاومة أنسولين خفيفة</option>
+            <option value="تكيس مبايض (PCOS)">تكيس مبايض (PCOS)</option>
+            <option value="خمول الغدة الدرقية">خمول الغدة الدرقية</option>
+            <option value="زيادة كتلة عضلية (نحافة)">علاج النحافة وزيادة كتلة عضلية</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-brand-subtext mb-1">ملاحظات طبية أو حساسيات غذائية</label>
+          <input id="new-pat-notes" type="text" placeholder="مثال: حساسية ألبان، تفضل البدائل النباتية في العشاء..." class="w-full bg-brand-bg border border-brand-border rounded-xl px-3.5 py-2 text-xs text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-brand-border/60">
+        <button id="btn-cancel-new-patient" class="px-4 py-2 rounded-xl text-xs font-bold text-brand-subtext hover:bg-brand-bg">إلغاء</button>
+        <button id="btn-save-new-patient" class="bg-brand-primary hover:bg-brand-hover text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-soft transition-all flex items-center gap-1.5">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>حفظ ومزامنة سحابياً</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Patient Clinical Profile Viewer -->
+  <div id="modal-patient-profile" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <div class="flex items-center gap-2.5">
+          <div id="profile-modal-avatar" class="w-10 h-10 rounded-full bg-brand-secondary text-brand-dark flex items-center justify-center font-bold text-xs">
+            س.أ
+          </div>
+          <div>
+            <h3 id="profile-modal-name" class="font-bold text-brand-dark text-base font-heading">سارة الأحمد</h3>
+            <p id="profile-modal-pkg" class="text-[11px] text-brand-dark font-bold">هجين (عيادة + أونلاين)</p>
+          </div>
+        </div>
+        <button id="btn-close-profile-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div class="bg-brand-bg p-3 rounded-2xl border border-brand-border/60">
+          <span class="text-[11px] text-brand-subtext block">العمر / الطول</span>
+          <strong id="profile-modal-bio" class="text-brand-dark text-sm">28 سنة | 164 سم</strong>
+        </div>
+        <div class="bg-brand-bg p-3 rounded-2xl border border-brand-border/60">
+          <span class="text-[11px] text-brand-subtext block">الوزن (الأولي &larr; الحالي)</span>
+          <strong id="profile-modal-weight" class="text-brand-dark text-sm">70.2 &larr; 66.4 كجم</strong>
+        </div>
+        <div class="bg-brand-bg p-3 rounded-2xl border border-brand-border/60 col-span-2">
+          <span class="text-[11px] text-brand-subtext block">التشخيص السريري والملاحظات</span>
+          <strong id="profile-modal-cond" class="text-brand-dark">مقاومة أنسولين خفيفة</strong>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-brand-border/60">
+        <button id="btn-close-profile-btn" class="px-4 py-2 rounded-xl text-xs font-bold text-brand-subtext hover:bg-brand-bg">إلغاء</button>
+        <button id="btn-profile-to-calc" class="bg-brand-primary hover:bg-brand-hover text-white px-4 py-2 rounded-xl text-xs font-bold shadow-soft transition-all flex items-center gap-1.5">
+          <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+          <span>فتح في حاسبة السعرات</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Cart Drawer / Shopping Bag Modal -->
+  <div id="modal-cart" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-brand-secondary text-brand-primary flex items-center justify-center font-bold">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-brand-dark text-base font-heading">سلة المشتريات</h3>
+            <p class="text-[11px] text-brand-subtext" id="cart-items-count-label">0 منتجات مختارة</p>
+          </div>
+        </div>
+        <button id="btn-close-cart-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="cart-items-list" class="flex-1 overflow-y-auto space-y-3 py-1 pr-1">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <div class="pt-3 border-t border-brand-border/60 space-y-3">
+        <div class="space-y-1.5 text-xs">
+          <div class="flex justify-between text-brand-subtext">
+            <span>المجموع الفرعي:</span>
+            <span id="cart-subtotal-val" class="font-bold text-brand-dark">0 ج.م</span>
+          </div>
+          <div class="flex justify-between text-brand-subtext">
+            <span>رسوم الشحن / الاستلام:</span>
+            <span class="font-bold text-emerald-600">مجاناً (مع باقات العيادة)</span>
+          </div>
+          <div class="flex justify-between text-sm font-black text-brand-dark pt-1 border-t border-brand-border/40">
+            <span>المجموع الكلي:</span>
+            <span id="cart-total-val" class="text-brand-primary text-base">0 ج.م</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <button id="btn-clear-cart" class="px-4 py-2.5 rounded-xl border border-brand-border text-xs font-bold text-brand-subtext hover:bg-brand-bg transition-all">
+            تفريغ السلة
+          </button>
+          <button id="btn-checkout-cart" class="flex-1 bg-brand-primary hover:bg-brand-hover text-white py-2.5 rounded-xl text-xs font-bold shadow-soft transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="credit-card" class="w-4 h-4"></i>
+            <span>متابعة إتمام الشراء</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Checkout & Egyptian Payment Gateway Modal -->
+  <div id="modal-checkout" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-brand-secondary text-brand-primary flex items-center justify-center font-bold">
+            <i data-lucide="credit-card" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-brand-dark text-base font-heading">تأكيد الطلب والدفع الإلكتروني</h3>
+            <p class="text-[11px] text-brand-subtext">وسائل الدفع المعتمدة في مصر 🇪🇬</p>
+          </div>
+        </div>
+        <button id="btn-close-checkout-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="bg-brand-bg p-3.5 rounded-2xl border border-brand-border flex items-center justify-between text-xs">
+        <span class="text-brand-subtext font-semibold">المبلغ الإجمالي المستحق:</span>
+        <span id="checkout-final-total" class="font-black text-brand-primary text-base">0 ج.م</span>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block text-xs font-bold text-brand-dark">طريقة الاستلام أو التوصيل:</label>
+        <select id="checkout-delivery-method" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-semibold text-brand-dark focus:outline-none focus:border-brand-primary">
+          <option value="clinic">استلام مباشر من مقر العيادة (المهندسين / التجمع الخامس)</option>
+          <option value="cairo_giza" selected>شحن سريع للقاهرة والجيزة (خلال 24-48 ساعة)</option>
+          <option value="alex_delta">شحن محافظات الإسكندرية والوجه البحري</option>
+          <option value="upper_egypt">شحن محافظات الصعيد والقناة</option>
+        </select>
+      </div>
+
+      <div class="space-y-2">
+        <div>
+          <label class="block text-[11px] font-bold text-brand-subtext mb-1">الاسم بالكامل</label>
+          <input id="checkout-cust-name" type="text" value="سارة الأحمد" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-brand-subtext mb-1">رقم الموبايل (واتساب للتأكيد)</label>
+          <input id="checkout-cust-phone" type="tel" value="01012345678" class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-bold text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-brand-subtext mb-1">عنوان التوصيل بالتفصيل</label>
+          <input id="checkout-cust-address" type="text" placeholder="المنطقة، اسم الشارع، رقم العمارة والشقة..." class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs text-brand-dark focus:outline-none focus:border-brand-primary">
+        </div>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <label class="block text-xs font-bold text-brand-dark">اختاري وسيلة الدفع المناسبة:</label>
+        <div class="space-y-1.5 text-xs">
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 cursor-pointer transition-all">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="pay_method" value="InstaPay (إنستاباي)" checked class="accent-brand-primary">
+              <span class="font-bold text-brand-dark">إنستاباي (InstaPay) تحويل لحظي</span>
+            </div>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">فوري ومجاني ⚡</span>
+          </label>
+
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 cursor-pointer transition-all">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="pay_method" value="Smart Wallet (محافظ كاش)" class="accent-brand-primary">
+              <span class="font-bold text-brand-dark">محافظ ذكية (فودافون كاش / إي آند / أورنج / WE)</span>
+            </div>
+            <span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded">كاش موبايل</span>
+          </label>
+
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 cursor-pointer transition-all">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="pay_method" value="Fawry Pay (فوري)" class="accent-brand-primary">
+              <span class="font-bold text-brand-dark">فوري (Fawry Pay) كود سداد من أي منفذ</span>
+            </div>
+            <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">كود سداد</span>
+          </label>
+
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 cursor-pointer transition-all">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="pay_method" value="Cards (ميزة / فيزا)" class="accent-brand-primary">
+              <span class="font-bold text-brand-dark">كروت ميزة / فيزا / ماستركارد البنوك المصرية</span>
+            </div>
+            <span class="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded">أونلاين</span>
+          </label>
+
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 cursor-pointer transition-all">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="pay_method" value="ValU (تقسيط فاليو)" class="accent-brand-primary">
+              <span class="font-bold text-brand-dark">تقسيط مع فاليو (ValU) أو سهولة</span>
+            </div>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">بدون مقدم</span>
+          </label>
+
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 cursor-pointer transition-all">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="pay_method" value="COD (كاش بالعيادة / الاستلام)" class="accent-brand-primary">
+              <span class="font-bold text-brand-dark">الدفع كاش عند الاستلام / بالعيادة</span>
+            </div>
+            <span class="text-[10px] bg-gray-100 text-gray-800 font-bold px-2 py-0.5 rounded">نقداً</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="payment-instructions-box" class="p-3 rounded-2xl bg-purple-50 border border-purple-200 text-xs text-purple-900 space-y-1">
+        <p class="font-bold flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4 text-purple-700"></i> بيانات التحويل عبر إنستاباي (InstaPay):</p>
+        <p class="text-[11px] leading-relaxed">
+          معرف إنستاباي (IPA): <strong class="bg-white px-2 py-0.5 rounded border border-purple-300 font-mono">dr.rama.safklo@instapay</strong><br>
+          أو على رقم الموبايل: <strong class="font-mono">01099887766</strong>
+        </p>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-brand-border/60">
+        <button id="btn-cancel-checkout" class="px-4 py-2 rounded-xl text-xs font-bold text-brand-subtext hover:bg-brand-bg">رجوع</button>
+        <button id="btn-confirm-order" class="bg-brand-primary hover:bg-brand-hover text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-soft transition-all flex items-center gap-1.5">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>تأكيد الطلب وإرساله لواتساب العيادة</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 8: Smart Weekly Grocery List -->
+  <div id="modal-grocery" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border border-brand-border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-brand-secondary text-brand-primary flex items-center justify-center font-bold">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-brand-dark text-base font-heading">قائمة مشتريات الأسبوع الذكية</h3>
+            <p class="text-[11px] text-brand-subtext">مستخرجة تلقائياً من خطتك الغذائية المعتمدة</p>
+          </div>
+        </div>
+        <button id="btn-close-grocery-modal" class="text-brand-subtext hover:text-brand-primary p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-3 bg-brand-bg rounded-2xl border border-brand-border/60 flex items-center justify-between text-xs">
+        <span class="font-semibold text-brand-subtext">نسبة اكتمال مقادير الأسبوع:</span>
+        <span id="grocery-progress-label" class="font-bold text-brand-primary">0%</span>
+      </div>
+      <div class="w-full bg-white h-2 rounded-full overflow-hidden border border-brand-border/40">
+        <div id="grocery-progress-fill" class="bg-brand-primary h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+      </div>
+
+      <div id="grocery-items-container" class="flex-1 overflow-y-auto space-y-4 pr-1">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <div class="flex items-center justify-between gap-2 pt-3 border-t border-brand-border/60">
+        <button id="btn-reset-grocery" class="text-xs font-bold text-brand-subtext hover:text-brand-primary">
+          إعادة ضبط
+        </button>
+        <button id="btn-copy-grocery" class="bg-brand-primary hover:bg-brand-hover text-white px-4 py-2 rounded-xl text-xs font-bold shadow-soft transition-all flex items-center gap-1.5">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>نسخ القائمة للملاحظات / واتساب</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Hidden Printable Sheet for PDF Export -->
+  <div id="printable-diet-plan" class="hidden">
+    <div style="font-family: 'Cairo', sans-serif; direction: rtl; text-align: right; color: #2B0914;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #E39E8B; padding-bottom: 12px; margin-bottom: 20px;">
+        <div>
+          <h1 style="font-size: 20px; font-weight: bold; margin: 0; color: #E39E8B;">عيادة د. راما سفقلو</h1>
+          <p style="font-size: 13px; margin: 4px 0 0; color: #683648;">استشارية السمنة والنحافة وتنسيق القوام | الخطة الغذائية العلاجية</p>
+        </div>
+        <div style="text-align: left; font-size: 11px;">
+          <p style="margin: 0;">المشتركة: <strong>سارة الأحمد</strong></p>
+          <p style="margin: 2px 0;">التاريخ: 28 أكتوبر 2026</p>
+          <p style="margin: 0; color: #E39E8B; font-weight: bold;">الهدف: 1,280 سعرة حرارية</p>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 14px; font-weight: bold; background: #F6D7DB; padding: 6px 10px; border-radius: 6px; color: #2B0914;">توزيع الماكروز الموصى به:</h3>
+        <p style="font-size: 12px; margin: 8px 0;">البروتين: 96 جم | الكربوهيدرات: 128 جم | الدهون الصحية: 43 جم | الماء: 2.5 لتر يومياً</p>
+      </div>
+
+      <div style="font-size: 12px; line-height: 1.8;">
+        <h4 style="font-weight: bold; color: #E39E8B; border-bottom: 1px solid #ddd; padding-bottom: 4px;">1. وجبة الإفطار (08:30 - 09:30 ص):</h4>
+        <p>• 2 بيضة مسلوقة أو أومليت خفيف + شريحة توست حبة كاملة (أو ربع رغيف بلدي) + صحن خضار ورقية مفتوح.</p>
+        
+        <h4 style="font-weight: bold; color: #E39E8B; border-bottom: 1px solid #ddd; padding-bottom: 4px; margin-top: 15px;">2. وجبة الغداء (02:00 - 03:30 م):</h4>
+        <p>• 150 جم صدر دجاج مشوي (أو ما يعادله من التونة/السمك) + 120 جم أرز مسلوق + سلطة خضراء مع ملعقة صغيرة زيت زيتون.</p>
+        
+        <h4 style="font-weight: bold; color: #E39E8B; border-bottom: 1px solid #ddd; padding-bottom: 4px; margin-top: 15px;">3. وجبة العشاء (07:30 - 08:30 م):</h4>
+        <p>• زبادي يوناني أو لايت 170 جم + رشة بذور شيا + تفاحة خضراء متوسطة أو طبق فراولة.</p>
+      </div>
+
+      <div style="margin-top: 40px; padding-top: 10px; border-top: 1px dashed #ccc; font-size: 10px; text-align: center; color: #888;">
+        تم إصدار هذا البرنامج عبر منصة العيادة الرقمية لدكتورة راما سفقلو.
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FIREBASE FIRESTORE INTEGRATION ================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      setDoc, 
+      addDoc, 
+      onSnapshot, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    // تم تصحيح الـ apiKey بوضع الصفرين 00 بدلاً من حرف O
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKO2cvW-EPJJfSQxXTJCE00GEH95-Q120",
+      authDomain: "dr-rama-safklo-clinic.firebaseapp.com",
+      projectId: "dr-rama-safklo-clinic",
+      storageBucket: "dr-rama-safklo-clinic.firebasestorage.app",
+      messagingSenderId: "989819409634",
+      appId: "1:989819409634:web:7067377605b7ab85017abb",
+      measurementId: "G-MBSG6LH42P"
+    };
+
+    let db = null;
+    let isCloudActive = false;
+
+    try {
+      if (!firebaseConfig.apiKey.includes("YOUR_API_KEY")) {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        isCloudActive = true;
+        const syncBadge = document.getElementById('cloud-sync-status');
+        if (syncBadge) syncBadge.classList.remove('hidden');
+        console.log("✅ Firebase Firestore Connected Successfully!");
+      }
+    } catch (e) {
+      console.warn("Firebase Init Error:", e);
+    }
+
+    window.CloudDB = {
+      isReady: () => isCloudActive && db !== null,
+
+      listenPatients: (callback) => {
+        if (!isCloudActive) return;
+        onSnapshot(collection(db, "patients"), (snapshot) => {
+          const list = [];
+          snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+          if (list.length > 0) callback(list);
+        });
+      },
+
+      savePatient: async (patient) => {
+        if (!isCloudActive) return;
+        await setDoc(doc(db, "patients", patient.id || ('p_' + Date.now())), patient);
+      },
+
+      listenChat: (callback) => {
+        if (!isCloudActive) return;
+        const q = query(collection(db, "chat_messages"), orderBy("timestamp", "asc"));
+        onSnapshot(q, (snapshot) => {
+          const msgs = [];
+          snapshot.forEach(docSnap => msgs.push(docSnap.data()));
+          if (msgs.length > 0) callback(msgs);
+        });
+      },
+
+      sendChatMessage: async (msg) => {
+        if (!isCloudActive) return;
+        await addDoc(collection(db, "chat_messages"), {
+          ...msg,
+          timestamp: Date.now()
+        });
+      },
+
+      listenInBody: (patientId, callback) => {
+        if (!isCloudActive) return;
+        onSnapshot(doc(db, "inbody_records", patientId), (docSnap) => {
+          if (docSnap.exists() && docSnap.data().records) {
+            callback(docSnap.data().records);
+          }
+        });
+      },
+
+      saveInBodyRecords: async (patientId, records) => {
+        if (!isCloudActive) return;
+        await setDoc(doc(db, "inbody_records", patientId), { records });
+      },
+
+      listenDietPlan: (patientId, callback) => {
+        if (!isCloudActive) return;
+        onSnapshot(doc(db, "diet_plans", patientId), (docSnap) => {
+          if (docSnap.exists() && docSnap.data().plan) {
+            callback(docSnap.data().plan);
+          }
+        });
+      },
+
+      saveDietPlan: async (patientId, plan) => {
+        if (!isCloudActive) return;
+        await setDoc(doc(db, "diet_plans", patientId), { plan, updatedAt: Date.now() });
+      }
+    };
+  </script>
+
+  <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
+  <script>
+    const CLINIC_WHATSAPP_NUMBER = "201099887766";
+    
+    const AUTH_CONFIG = {
+      DOCTOR_EMAIL: "dr.rama@clinic.com",
+      DOCTOR_PIN: "123456"
+    };
+
+    const DEFAULT_PATIENTS = [
+      {
+        id: 'p1',
+        name: 'سارة الأحمد',
+        initials: 'س.أ',
+        phone: '01012345678',
+        age: 28,
+        height: 164,
+        initialWeight: 70.2,
+        currentWeight: 66.4,
+        targetWeight: 60.0,
+        packageKey: 'hybrid',
+        packageLabel: 'هجين (عيادة + أونلاين)',
+        packageClass: 'bg-brand-secondary text-brand-dark',
+        condition: 'مقاومة أنسولين خفيفة',
+        conditionClass: 'bg-amber-50 text-amber-800',
+        adherence: 92,
+        notes: 'ملتزمة جداً ببدائل البروتين'
+      },
+      {
+        id: 'p2',
+        name: 'مريم الشناوي',
+        initials: 'م.ش',
+        phone: '01198765432',
+        age: 25,
+        height: 160,
+        initialWeight: 62.0,
+        currentWeight: 58.8,
+        targetWeight: 55.0,
+        packageKey: 'vip',
+        packageLabel: 'باقة 3 أشهر عرائس',
+        packageClass: 'bg-purple-50 text-purple-700',
+        condition: 'سليمة / نحت خصر',
+        conditionClass: 'bg-emerald-50 text-emerald-700',
+        adherence: 96,
+        notes: 'هدف تنسيق القوام قبل الزفاف'
+      },
+      {
+        id: 'p3',
+        name: 'ريم عبدالرحمن',
+        initials: 'ر.ع',
+        phone: '01232198765',
+        age: 31,
+        height: 166,
+        initialWeight: 84.5,
+        currentWeight: 81.0,
+        targetWeight: 68.0,
+        packageKey: 'online',
+        packageLabel: 'أونلاين شهري',
+        packageClass: 'bg-sky-50 text-sky-700',
+        condition: 'تكيس مبايض (PCOS)',
+        conditionClass: 'bg-rose-50 text-rose-700',
+        adherence: 84,
+        notes: 'نظام منخفض المؤشر الجلايسيمي'
+      }
+    ];
+
+    const DEFAULT_INBODY_DATA = [
+      { week: 'الأسبوع 1', weightKg: 70.2, bodyFatPercent: 30.0, muscleMassKg: 23.9 },
+      { week: 'الأسبوع 2', weightKg: 68.9, bodyFatPercent: 28.8, muscleMassKg: 24.0 },
+      { week: 'الأسبوع 3', weightKg: 67.2, bodyFatPercent: 27.5, muscleMassKg: 24.1 },
+      { week: 'الأسبوع 4', weightKg: 66.4, bodyFatPercent: 26.8, muscleMassKg: 24.2 }
+    ];
+
+    const DEFAULT_CHAT_MESSAGES = [
+      {
+        sender: 'doctor',
+        text: 'أهلاً بكِ يا سارة 🌸 اطلعت على فحص وزنكِ الأخير، النزول ممتاز جداً ومحيط الخصر انخفض 5.5 سم! هل واجهتِ أي صعوبة في تبديل مصادر البروتين أو الالتزام بالماء هذا الأسبوع؟',
+        time: 'أمس 11:20 ص'
+      },
+      {
+        sender: 'patient',
+        text: 'أهلاً دكتورة راما! شكراً جداً لتشجيعك ❤️ استخدمت مولد البدائل لاستبدال الدجاج بالجبنة القريش والتونة وكان التغيير مريحاً جداً وبنفس السعرات.',
+        time: 'أمس 11:35 ص'
+      }
+    ];
+
+    const DEFAULT_PATIENT_FILES = [
+      {
+        name: 'تقرير InBody 770 - فرع المهندسين.pdf',
+        size: '1.4 MB',
+        date: '18 أكتوبر 2026',
+        type: 'pdf',
+        tag: 'تم التدقيق السريري',
+        tagClass: 'bg-emerald-100 text-emerald-800'
+      },
+      {
+        name: 'تحليل الدم الشامل (CBC + Vit D + TSH).jpg',
+        size: '2.8 MB',
+        date: '1 أكتوبر 2026',
+        type: 'image',
+        tag: 'فيتامين D منخفض',
+        tagClass: 'bg-brand-secondary text-brand-dark'
+      }
+    ];
+
+    const DEFAULT_MEALS_PLAN = [
+      {
+        id: 'meal_1',
+        name: 'وجبة الإفطار (تنشيط الأيض وتثبيت الأنسولين)',
+        time: '8:30 - 9:30 ص',
+        cals: 390,
+        protein: 28,
+        items: [
+          {
+            id: 'it_1',
+            title: '2 بيضة كاملة مسلوقة أو أومليت',
+            desc: 'حصة بروتين ودهون صحية (140 سعرة | 12g P | 10g F)',
+            slot: 'protein',
+            currentKey: 'eggs',
+            icon: 'egg'
+          },
+          {
+            id: 'it_2',
+            title: 'شريحة خبز حبة كاملة (توست بني 40 جم أو ربع رغيف بلدي)',
+            desc: 'حصة كربوهيدرات معقدة (100 سعرة | 4g P | 19g C)',
+            slot: 'carb',
+            currentKey: 'toast',
+            icon: 'wheat'
+          },
+          {
+            id: 'it_3',
+            title: 'صحن خضار ورقية (جرجير، خيار، خس) كمية مفتوحة',
+            desc: 'ألياف وفيتامينات (سعرات حرة < 30 سعرة)',
+            slot: null,
+            badge: 'كمية مفتوحة',
+            icon: 'salad'
+          }
+        ]
+      },
+      {
+        id: 'meal_2',
+        name: 'وجبة الغداء (تنسيق القوام وبناء الألياف العضلية)',
+        time: '2:00 - 3:30 م',
+        cals: 560,
+        protein: 42,
+        items: [
+          {
+            id: 'it_4',
+            title: 'صدر دجاج مشوي متبل بالأعشاب (150 جم مطبوخ)',
+            desc: 'بروتين صافي عالي الجودة (245 سعرة | 46g P | 5g F)',
+            slot: 'protein',
+            currentKey: 'chicken',
+            icon: 'beef'
+          },
+          {
+            id: 'it_5',
+            title: 'أرز مسلوق أو بني (120 جم - 6 ملاعق طعام)',
+            desc: 'طاقة مستدامة (155 سعرة | 3g P | 34g C)',
+            slot: 'carb',
+            currentKey: 'rice',
+            icon: 'bowl'
+          },
+          {
+            id: 'it_6',
+            title: 'سلطة خضراء مع ملعقة صغيرة زيت زيتون بكر (5 مل)',
+            desc: 'دهون أحادية غير مشبعة (65 سعرة | 7g F)',
+            slot: null,
+            badge: 'أساسي للبشرة',
+            icon: 'sparkles'
+          }
+        ]
+      },
+      {
+        id: 'meal_3',
+        name: 'وجبة العشاء (خفيفة لتعزيز الهضم والنوم العميق)',
+        time: '7:30 - 8:30 م',
+        cals: 330,
+        protein: 26,
+        items: [
+          {
+            id: 'it_7',
+            title: 'زبادي يوناني أو لايت (170 جم) + رشة بذور شيا',
+            desc: 'بروبيوتيك وكالسيوم (160 سعرة | 18g P | 7g C | 5g F)',
+            slot: 'protein',
+            currentKey: 'yogurt',
+            icon: 'milk'
+          },
+          {
+            id: 'it_8',
+            title: 'تفاحة خضراء متوسطة الحجم أو طبق فراولة طازجة',
+            desc: 'مضادات أكسدة وسكر فواكه بطيء الامتصاص (75 سعرة | 18g C)',
+            slot: 'fruit',
+            currentKey: 'apple',
+            icon: 'apple'
+          }
+        ]
+      }
+    ];
+
+    const CLINIC_PRODUCTS = [
+      {
+        id: 'prod_1',
+        title: 'مشروب الكولاجين البحري النقي + فيتامين C',
+        category: 'supplements',
+        categoryLabel: 'مكملات ونضارة',
+        price: 1150,
+        icon: '✨',
+        desc: 'تركيبة نقية معتمدة لشد ترهلات الجسم والحفاظ على مرونة ونضارة البشرة أثناء نزول الوزن السريع.',
+        badge: 'الأكثر طلباً'
+      },
+      {
+        id: 'prod_2',
+        title: 'بروتين مصل اللبن المعزول (Iso Whey) نكهة فانيلا',
+        category: 'supplements',
+        categoryLabel: 'مكملات ونضارة',
+        price: 1850,
+        icon: '🥛',
+        desc: 'بروتين نقي خالٍ من اللاكتوز والدهون، يمنحكِ 27 جم بروتين صافي لكل مكيال لدعم الكتلة العضلية ونحت الخصر.',
+        badge: 'معتمد سريرياً'
+      },
+      {
+        id: 'prod_3',
+        title: 'الميزان الذكي المتصل بتطبيق العيادة (Smart Scale Pro)',
+        category: 'tools',
+        categoryLabel: 'أجهزة ومقاسات',
+        price: 1250,
+        icon: '⚖️',
+        desc: 'يقيس الوزن ونسبة الدهون والكتلة العضلية بدقة ويتزامن فورياً مع رسمكِ البياني في التطبيق عبر البلوتوث.',
+        badge: 'تزامن ذكي'
+      },
+      {
+        id: 'prod_4',
+        title: 'شريط قياس الخصر الرقمي الدقيق (Digital Tape)',
+        category: 'tools',
+        categoryLabel: 'أجهزة ومقاسات',
+        price: 490,
+        icon: '📏',
+        desc: 'شريط قياس رقمي عالي الدقة يثبت تلقائياً حول الخصر والأرداف لرصد سنتيمترات التناسق بدقة متناهية.',
+        badge: 'دقة عالية'
+      },
+      {
+        id: 'prod_5',
+        title: 'قارورة الماء التحفيزية سعة 2.5 لتر',
+        category: 'tools',
+        categoryLabel: 'أجهزة ومقاسات',
+        price: 280,
+        icon: '💧',
+        desc: 'قارورة أنيقة بتوقيتات محفزة تساعدكِ على إتمام هدف شرب الماء اليومي للعيادة بكل سهولة دون نسيان.',
+        badge: 'BPA Free'
+      },
+      {
+        id: 'prod_6',
+        title: 'بذور الشيا العضوية المعتمدة (500 جم)',
+        category: 'foods',
+        categoryLabel: 'أغذية صحية',
+        price: 220,
+        icon: '🌱',
+        desc: 'غنية بأوميغا 3 والألياف اللزجة لإبطاء امتصاص السكريات وزيادة الإحساس بالشبع طوال ساعات المساء.',
+        badge: 'عضوي 100%'
+      }
+    ];
+
+    const CLINIC_RECIPES = [
+      {
+        id: 'rec_1',
+        title: 'سلطة كينوا دافئة مع الجبن القريش والأعشاب',
+        category: 'high-protein',
+        emoji: '🥗',
+        time: '15 دقيقة',
+        cals: 280,
+        desc: 'وجبة غنية بالألياف والمعادن والبروتين النظيف لتعزيز الشبع واستقرار سكر الدم.',
+        protein: '22g', carbs: '32g', fats: '7g',
+        tag: 'مسموح في خطتك الحالية'
+      },
+      {
+        id: 'rec_2',
+        title: 'بان كيك الشوفان بالبروتين والقرفة',
+        category: 'high-protein',
+        emoji: '🥞',
+        time: '10 دقائق',
+        cals: 230,
+        desc: 'بديل صحي رائع للإفطار أو سناك قبل التمرين بدون إضافة سكر مكرر.',
+        protein: '24g', carbs: '26g', fats: '4g',
+        tag: 'مسموح في خطتك الحالية'
+      },
+      {
+        id: 'rec_3',
+        title: 'سموذي التوت البري ومضادات الأكسدة',
+        category: 'snacks',
+        emoji: '🥤',
+        time: '5 دقائق',
+        cals: 160,
+        desc: 'مشروب منعش غني بمضادات الأكسدة وداعم لشد البشرة ونضارتها أثناء نزول الوزن.',
+        protein: '12g', carbs: '22g', fats: '2g',
+        tag: 'سناك نشاط'
+      }
+    ];
+
+    function renderRecipes(category = 'all') {
+      const container = document.getElementById('recipes-grid-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filtered = category === 'all' 
+        ? CLINIC_RECIPES 
+        : CLINIC_RECIPES.filter(r => r.category === category);
+
+      filtered.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-3xl border border-brand-border overflow-hidden shadow-soft hover:shadow-md transition-all group';
+        card.innerHTML = `
+          <div class="h-44 bg-gradient-to-tr from-brand-secondary to-[#FFE0EC] relative flex items-center justify-center p-4">
+            <span class="text-5xl group-hover:scale-110 transition-transform">${r.emoji}</span>
+            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-dark text-[10px] font-bold px-2.5 py-1 rounded-full border border-brand-accent/50">
+              ${r.tag}
+            </span>
+          </div>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-brand-subtext font-semibold flex items-center gap-1">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i> ${r.time}
+              </span>
+              <span class="text-xs font-black text-brand-dark">${r.cals} سعرة حرارية</span>
+            </div>
+            <h4 class="font-bold text-brand-dark text-sm">${r.title}</h4>
+            <p class="text-xs text-brand-subtext line-clamp-2">${r.desc}</p>
+            <div class="pt-2 flex items-center justify-between border-t border-brand-border/50 text-[11px] font-bold text-brand-subtext">
+              <span>بروتين: ${r.protein}</span>
+              <span>كارب: ${r.carbs}</span>
+              <span>دهون: ${r.fats}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    const DB = {
+      get(key, fallback) {
+        try {
+          const val = localStorage.getItem('dr_rama_' + key);
+          return val ? JSON.parse(val) : fallback;
+        } catch {
+          return fallback;
+        }
+      },
+      set(key, val) {
+        try {
+          localStorage.setItem('dr_rama_' + key, JSON.stringify(val));
+        } catch (e) {
+          console.warn('LocalStorage error:', e);
+        }
+      }
+    };
+
+    let currentSession = DB.get('currentSession', null);
+
+    const appState = {
+      patientSubTab: 'tab-inbody',
+      doctorSubTab: 'doc-tab-calc',
+      chartMetric: 'weightKg',
+      waterMl: DB.get('waterMl', 1500),
+      targetWaterMl: 2500,
+      patientsList: DB.get('patientsList', DEFAULT_PATIENTS),
+      inbodyData: DB.get('inbodyData', DEFAULT_INBODY_DATA),
+      chatMessages: DB.get('chatMessages', DEFAULT_CHAT_MESSAGES),
+      patientFiles: DB.get('patientFiles', DEFAULT_PATIENT_FILES),
+      dietPlan: DB.get('dietPlan', DEFAULT_MEALS_PLAN),
+      cart: DB.get('cart', []),
+
+      exchangeDatabase: {
+        'chicken': {
+          title: 'صدر دجاج مشوي (150 جم)',
+          options: [
+            { id: 'tuna', name: 'تونة مصفاة بالماء (180 جم)', macros: '240 سعرة | 46g P | 3g F', title: 'تونة مصفاة بالماء (180 جم)' },
+            { id: 'cottage', name: 'جبن قريش طبيعي (220 جم)', macros: '235 سعرة | 45g P | 5g F', title: 'جبن قريش طبيعي قليل الدسم (220 جم)' },
+            { id: 'salmon', name: 'سمك مشوي فيليه (150 جم)', macros: '250 سعرة | 42g P | 8g F', title: 'سمك فيليه طازج مشوي (150 جم)' },
+            { id: 'turkey', name: 'شرائح ديك رومي مشوي (160 جم)', macros: '240 سعرة | 46g P | 4g F', title: 'ستيك ديك رومي مشوي (160 جم)' }
+          ]
+        },
+        'rice': {
+          title: 'أرز مسلوق أو بني (120 جم - 6 ملاعق)',
+          options: [
+            { id: 'potato', name: 'بطاطس أو بطاطا مشوية بالفرن (180 جم)', macros: '155 سعرة | 3g P | 35g C', title: 'بطاطس مشوية بالفرن (180 جم)' },
+            { id: 'quinoa', name: 'كينوا مطبوخة (130 جم)', macros: '156 سعرة | 5g P | 29g C', title: 'كينوا عضوية مطبوخة (130 جم)' },
+            { id: 'oats', name: 'شوفان حبة كاملة (40 جم)', macros: '150 سعرة | 5g P | 27g C', title: 'شوفان حبة كاملة (40 جم)' }
+          ]
+        },
+        'eggs': {
+          title: '2 بيضة كاملة مسلوقة',
+          options: [
+            { id: 'halloumi', name: 'جبن قريش بملعقة زيت زيتون (120 جم)', macros: '145 سعرة | 16g P | 7g F', title: 'جبن قريش بالأعشاب وزيت الزيتون' },
+            { id: 'egg_whites', name: 'بياض 4 بيضات + ملعقة صغيرة جبنة لايت', macros: '135 سعرة | 15g P | 5g F', title: 'بياض 4 بيضات + ملعقة صغيرة جبنة لايت' },
+            { id: 'labneh', name: 'لبنة أو زبادي يوناني لايت (120 جم)', macros: '140 سعرة | 12g P | 6g F', title: 'لبنة لايت مع زعتر (120 جم)' }
+          ]
+        },
+        'toast': {
+          title: 'شريحة خبز حبة كاملة (توست بني 40 جم أو ربع رغيف بلدي)',
+          options: [
+            { id: 'baladi', name: 'ربع رغيف خبز بلدي بالردة (40 جم)', macros: '105 سعرة | 3g P | 22g C', title: 'ربع رغيف خبز بلدي بالردة' },
+            { id: 'corn_thins', name: '3 رقائق رايس كيك (مقرمشات الأرز البني)', macros: '95 سعرة | 2g P | 21g C', title: '3 رقائق مقرمشات الأرز البني' },
+            { id: 'tortilla', name: 'نصف خبز تورتيلا قمح كامل', macros: '95 سعرة | 18g C', title: 'نصف رغيف تورتيلا قمح كامل' }
+          ]
+        },
+        'yogurt': {
+          title: 'زبادي يوناني أو لايت (170 جم)',
+          options: [
+            { id: 'kefir', name: 'مشروب الكفير البروبيوتيك (200 مل)', macros: '150 سعرة | 14g P | 6g C', title: 'مشروب الكفير البروبيوتيك (200 مل)' },
+            { id: 'pudding', name: 'بودينغ بذور الشيا مع حليب لوز (150 جم)', macros: '145 سعرة | 8g P | 10g C | 7g F', title: 'بودينغ بذور الشيا مع حليب اللوز' }
+          ]
+        },
+        'apple': {
+          title: 'تفاحة خضراء متوسطة الحجم',
+          options: [
+            { id: 'berries', name: 'طبق فراولة أو توت طازج (180 جم)', macros: '70 سعرة | 16g C', title: 'طبق فراولة طازجة (180 جم)' },
+            { id: 'kiwi', name: '2 حبة كيوي طازج', macros: '80 سعرة | 18g C', title: '2 حبة كيوي طازج' }
+          ]
+        }
+      },
+
+      activeExchangeSlot: null,
+
+      groceryCategories: [
+        {
+          id: 'cat_protein',
+          title: 'مصادر البروتين النظيف',
+          icon: 'beef',
+          color: 'text-rose-600',
+          items: [
+            { id: 'g_1', name: 'طبق بيض بلدي طازج (10-15 بيضة)', portion: 'حصة أسبوع كامل', checked: false },
+            { id: 'g_2', name: 'صدور دجاج فيليه طازجة بدون جلد (1 كجم)', portion: 'لوجبات الغداء', checked: false },
+            { id: 'g_3', name: 'علبتين تونة مصفاة بالماء أو سمك فيليه (400 جم)', portion: 'بديل سريع للغداء', checked: false },
+            { id: 'g_4', name: 'جبن قريش طبيعي قليل الملح (500 جم)', portion: 'للإفطار أو العشاء', checked: false }
+          ]
+        },
+        {
+          id: 'cat_carbs',
+          title: 'النشويات المعقدة والطاقة',
+          icon: 'wheat',
+          color: 'text-amber-600',
+          items: [
+            { id: 'g_5', name: 'كيس خبز توست بني حبة كاملة أو خبز بلدي بالردة', portion: 'حصة يومية', checked: false },
+            { id: 'g_6', name: 'أرز بني أو أرز بسمتي ذهبي (1 كجم)', portion: 'لأيام التمرين والغداء', checked: false },
+            { id: 'g_7', name: 'شوفان رقائق كاملة عضوي (500 جم)', portion: 'بديل للإفطار والبانكيك', checked: false }
+          ]
+        },
+        {
+          id: 'cat_veggies',
+          title: 'الخضروات الورقية ومضادات الأكسدة',
+          icon: 'salad',
+          color: 'text-emerald-600',
+          items: [
+            { id: 'g_8', name: 'حزمتين جرجير طازج + خس كابوتشا', portion: 'كمية مفتوحة يومياً', checked: false },
+            { id: 'g_9', name: 'خيار طازج (1.5 كجم) + طماطم شيري', portion: 'للسلطات والسناكس', checked: false },
+            { id: 'g_10', name: 'ليمون طازج + فلفل ألوان', portion: 'فيتامين C وتتبيل', checked: false }
+          ]
+        },
+        {
+          id: 'cat_dairy_fats',
+          title: 'الألبان، الدهون الصحية والفواكه',
+          icon: 'apple',
+          color: 'text-sky-600',
+          items: [
+            { id: 'g_11', name: 'زبادي يوناني طبيعي أو لايت (5 علب × 170 جم)', portion: 'لوجبات العشاء', checked: false },
+            { id: 'g_12', name: 'زجاجة زيت زيتون بكر ممتاز معصور على البارد', portion: 'ملعقة صغيرة يومياً', checked: false },
+            { id: 'g_13', name: 'بذور شيا عضوية (عبوة 250 جم)', portion: 'للعشاء والشبع', checked: false },
+            { id: 'g_14', name: 'تفاح أخضر سكري أو علبة فراولة طازجة (1 كجم)', portion: 'سناك فواكه بطيء الامتصاص', checked: false }
+          ]
+        }
+      ]
+    };
+
+    const savedGrocery = DB.get('groceryCategories', null);
+    if (savedGrocery && Array.isArray(savedGrocery) && savedGrocery.length > 0) {
+      appState.groceryCategories = savedGrocery;
+    }
+
+    let chartInstance = null;
+    let deferredPrompt = null;
+    let isRecordingAudio = false;
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'bg-brand-dark text-white text-xs font-bold py-2.5 px-4 rounded-2xl shadow-xl flex items-center gap-2 pointer-events-auto border border-brand-accent/40 animate-in fade-in slide-in-from-bottom-2';
+      const icon = type === 'success' ? '✨' : (type === 'error' ? '⚠️' : 'ℹ️');
+      toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'transition-opacity');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function initAuthUI() {
+      const authGateway = document.getElementById('auth-gateway');
+      const userNameEl = document.getElementById('user-display-name');
+      const userRoleEl = document.getElementById('user-role-label');
+      const userRoleIcon = document.getElementById('user-role-icon');
+
+      const viewPatient = document.getElementById('view-patient');
+      const viewDoctor = document.getElementById('view-doctor');
+
+      if (!currentSession) {
+        if (authGateway) authGateway.classList.remove('hidden');
+        if (viewPatient) viewPatient.classList.add('hidden');
+        if (viewDoctor) viewDoctor.classList.add('hidden');
+        return;
+      }
+
+      if (authGateway) authGateway.classList.add('hidden');
+
+      if (currentSession.role === 'doctor') {
+        if (userNameEl) userNameEl.textContent = "د. راما سفقلو";
+        if (userRoleEl) {
+          userRoleEl.textContent = "طبيبة مصرحة";
+          userRoleEl.className = "bg-brand-dark text-white text-[10px] px-2 py-0.5 rounded-full";
+        }
+        if (userRoleIcon) userRoleIcon.textContent = "🩺";
+
+        if (viewDoctor) viewDoctor.classList.remove('hidden');
+        if (viewPatient) viewPatient.classList.add('hidden');
+      } else {
+        const patientData = appState.patientsList.find(p => p.phone === currentSession.phone) || appState.patientsList[0];
+        
+        if (userNameEl) userNameEl.textContent = patientData.name;
+        if (userRoleEl) {
+          userRoleEl.textContent = "مشتركة";
+          userRoleEl.className = "bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full";
+        }
+        if (userRoleIcon) userRoleIcon.textContent = "🌸";
+
+        const heroPatName = document.getElementById('hero-patient-name');
+        const heroCurrentW = document.getElementById('hero-current-weight');
+        const heroTargetW = document.getElementById('hero-target-weight');
+        if (heroPatName) heroPatName.textContent = patientData.name;
+        if (heroCurrentW) heroCurrentW.textContent = patientData.currentWeight;
+        if (heroTargetW) heroTargetW.textContent = patientData.targetWeight;
+
+        if (viewPatient) viewPatient.classList.remove('hidden');
+        if (viewDoctor) viewDoctor.classList.add('hidden');
+
+        initInBodyChart();
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function updateCartBadge() {
+      const totalCount = appState.cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('header-cart-badge');
+      const modalCount = document.getElementById('cart-items-count-label');
+      if (badge) badge.textContent = totalCount;
+      if (modalCount) modalCount.textContent = `${totalCount} منتجات مختارة`;
+    }
+
+    function renderStoreProducts(category = 'all') {
+      const grid = document.getElementById('store-products-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const filtered = category === 'all' 
+        ? CLINIC_PRODUCTS 
+        : CLINIC_PRODUCTS.filter(p => p.category === category);
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-3xl border border-brand-border overflow-hidden shadow-soft hover:shadow-md transition-all flex flex-col justify-between group';
+        card.innerHTML = `
+          <div>
+            <div class="h-44 bg-gradient-to-tr from-brand-secondary via-white to-brand-bg relative flex items-center justify-center p-4">
+              <span class="text-6xl group-hover:scale-110 transition-transform">${p.icon}</span>
+              <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-dark text-[10px] font-bold px-2.5 py-1 rounded-full border border-brand-accent/50">
+                ${p.badge}
+              </span>
+            </div>
+            <div class="p-5 space-y-2.5">
+              <span class="text-[10px] font-bold text-brand-primary bg-brand-secondary/80 px-2 py-0.5 rounded-md">
+                ${p.categoryLabel}
+              </span>
+              <h4 class="font-bold text-brand-dark text-sm leading-snug">${p.title}</h4>
+              <p class="text-xs text-brand-subtext line-clamp-2">${p.desc}</p>
+            </div>
+          </div>
+          <div class="p-5 pt-0 border-t border-brand-border/40 mt-3 flex items-center justify-between">
+            <div>
+              <span class="text-base font-black text-brand-dark">${p.price.toLocaleString()}</span>
+              <span class="text-[10px] text-brand-subtext font-bold">ج.م</span>
+            </div>
+            <button class="btn-add-to-cart bg-brand-primary hover:bg-brand-hover text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5" data-id="${p.id}">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>إضافة للسلة</span>
+            </button>
+          </div>
+        `;
+        card.querySelector('.btn-add-to-cart').addEventListener('click', () => addToCart(p));
+        grid.appendChild(card);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function addToCart(product) {
+      const existing = appState.cart.find(i => i.id === product.id);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        appState.cart.push({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          icon: product.icon,
+          quantity: 1
+        });
+      }
+      DB.set('cart', appState.cart);
+      updateCartBadge();
+      showToast(`تمت إضافة "${product.title}" إلى السلة 🛒`);
+    }
+
+    function renderCartModal() {
+      const listContainer = document.getElementById('cart-items-list');
+      const subtotalEl = document.getElementById('cart-subtotal-val');
+      const totalEl = document.getElementById('cart-total-val');
+      if (!listContainer) return;
+
+      listContainer.innerHTML = '';
+
+      if (appState.cart.length === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-10 space-y-2 text-brand-subtext">
+            <span class="text-4xl">🛍️</span>
+            <p class="text-xs font-bold">سلة المشتريات فارغة حالياً</p>
+            <p class="text-[11px]">تصفحي متجر المكملات وأضيفي منتجاتك المفضلة</p>
+          </div>
+        `;
+        if (subtotalEl) subtotalEl.textContent = '0 ج.م';
+        if (totalEl) totalEl.textContent = '0 ج.م';
+        return;
+      }
+
+      let subtotal = 0;
+
+      appState.cart.forEach((item, idx) => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-3 rounded-2xl bg-brand-bg border border-brand-border/60 text-xs';
+        row.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">${item.icon}</span>
+            <div>
+              <h5 class="font-bold text-brand-dark text-xs">${item.title}</h5>
+              <p class="text-[10px] text-brand-subtext font-medium">${item.price.toLocaleString()} ج.م / للقطعة</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex items-center bg-white border border-brand-border rounded-xl">
+              <button class="btn-cart-dec px-2 py-0.5 text-brand-dark font-black hover:bg-brand-secondary rounded-r-xl" data-idx="${idx}">-</button>
+              <span class="px-2 font-bold text-brand-dark text-[11px]">${item.quantity}</span>
+              <button class="btn-cart-inc px-2 py-0.5 text-brand-dark font-black hover:bg-brand-secondary rounded-l-xl" data-idx="${idx}">+</button>
+            </div>
+            <span class="font-black text-brand-dark text-xs w-16 text-left">${itemTotal.toLocaleString()} ج.م</span>
+            <button class="btn-cart-del text-rose-500 hover:text-rose-700 p-1" data-idx="${idx}">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        `;
+
+        row.querySelector('.btn-cart-inc').addEventListener('click', () => {
+          appState.cart[idx].quantity += 1;
+          DB.set('cart', appState.cart);
+          updateCartBadge();
+          renderCartModal();
+        });
+
+        row.querySelector('.btn-cart-dec').addEventListener('click', () => {
+          if (appState.cart[idx].quantity > 1) {
+            appState.cart[idx].quantity -= 1;
+          } else {
+            appState.cart.splice(idx, 1);
+          }
+          DB.set('cart', appState.cart);
+          updateCartBadge();
+          renderCartModal();
+        });
+
+        row.querySelector('.btn-cart-del').addEventListener('click', () => {
+          appState.cart.splice(idx, 1);
+          DB.set('cart', appState.cart);
+          updateCartBadge();
+          renderCartModal();
+          showToast('تم حذف المنتج من السلة');
+        });
+
+        listContainer.appendChild(row);
+      });
+
+      if (subtotalEl) subtotalEl.textContent = `${subtotal.toLocaleString()} ج.م`;
+      if (totalEl) totalEl.textContent = `${subtotal.toLocaleString()} ج.م`;
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderDietMeals() {
+      const container = document.getElementById('meals-list-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let totalCals = 0;
+      let totalProtein = 0;
+
+      appState.dietPlan.forEach((meal, mealIdx) => {
+        totalCals += meal.cals;
+        totalProtein += meal.protein;
+
+        const mealCard = document.createElement('div');
+        mealCard.className = 'bg-white rounded-3xl border border-brand-border shadow-soft overflow-hidden transition-all';
+        
+        let itemsHtml = '';
+        meal.items.forEach(item => {
+          const exchangeBtn = item.slot ? `
+            <button class="btn-exchange-food bg-white hover:bg-brand-secondary text-brand-dark border border-brand-accent px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs" 
+                    data-meal="${meal.id}" data-slot="${item.slot}" data-current="${item.currentKey || 'chicken'}">
+              <i data-lucide="repeat" class="w-3.5 h-3.5 text-brand-primary"></i>
+              <span>تبديل الصنف</span>
+            </button>
+          ` : (item.badge ? `<span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">${item.badge}</span>` : '');
+
+          itemsHtml += `
+            <div class="py-3 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-secondary/60 flex items-center justify-center text-brand-primary flex-shrink-0">
+                  <i data-lucide="${item.icon || 'sparkles'}" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h5 id="item-title-${item.id}" class="text-xs sm:text-sm font-bold text-brand-dark">${item.title}</h5>
+                  <p id="item-macros-${item.id}" class="text-[11px] text-brand-subtext">${item.desc}</p>
+                </div>
+              </div>
+              ${exchangeBtn}
+            </div>
+          `;
+        });
+
+        mealCard.innerHTML = `
+          <div class="bg-gradient-to-r from-brand-secondary/70 to-white px-6 py-4 flex items-center justify-between border-b border-brand-border/50">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-bold text-xs shadow-xs">0${mealIdx + 1}</span>
+              <div>
+                <h4 class="font-bold text-sm text-brand-dark">${meal.name}</h4>
+                <span class="text-[11px] text-brand-subtext font-medium">الوقت المثالي: ${meal.time}</span>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-brand-dark bg-white px-3 py-1 rounded-full border border-brand-accent/40 shadow-xs">
+              ${meal.cals} سعرة حرارية | ${meal.protein}g بروتين
+            </span>
+          </div>
+          <div class="p-6 divide-y divide-brand-border/40">
+            ${itemsHtml}
+          </div>
+        `;
+
+        container.appendChild(mealCard);
+      });
+
+      const totalCalsEl = document.getElementById('diet-total-cals');
+      const totalProteinEl = document.getElementById('diet-total-protein');
+      if (totalCalsEl) totalCalsEl.textContent = totalCals.toLocaleString();
+      if (totalProteinEl) totalProteinEl.innerHTML = `${totalProtein} <span class="text-xs font-normal">جم</span>`;
+
+      bindExchangeButtons();
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderBuilderMeals() {
+      const container = document.getElementById('builder-meals-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      appState.dietPlan.forEach((meal, mealIdx) => {
+        const mealBox = document.createElement('div');
+        mealBox.className = 'p-4 rounded-2xl bg-brand-bg/60 border border-brand-border space-y-3';
+        
+        let itemsInputs = '';
+        meal.items.forEach((item, itIdx) => {
+          itemsInputs += `
+            <div class="flex items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-brand-border/70 text-xs">
+              <div class="flex-1 space-y-1">
+                <input type="text" value="${item.title}" class="builder-item-title font-bold text-brand-dark bg-transparent w-full focus:outline-none focus:border-b border-brand-primary text-xs" data-meal-idx="${mealIdx}" data-item-idx="${itIdx}">
+                <input type="text" value="${item.desc}" class="builder-item-desc text-[11px] text-brand-subtext bg-transparent w-full focus:outline-none focus:border-b border-brand-primary" data-meal-idx="${mealIdx}" data-item-idx="${itIdx}">
+              </div>
+              <button class="btn-builder-delete-item text-rose-500 hover:text-rose-700 p-1.5 flex-shrink-0" data-meal-idx="${mealIdx}" data-item-idx="${itIdx}" title="حذف هذا الصنف">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          `;
+        });
+
+        mealBox.innerHTML = `
+          <div class="flex items-center justify-between gap-3 pb-2 border-b border-brand-border/40">
+            <div class="flex items-center gap-2 flex-1">
+              <span class="w-6 h-6 rounded-lg bg-brand-primary text-white text-[11px] font-bold flex items-center justify-center">${mealIdx + 1}</span>
+              <input type="text" value="${meal.name}" class="builder-meal-name font-bold text-brand-dark text-xs sm:text-sm bg-transparent flex-1 focus:outline-none focus:border-b border-brand-primary" data-meal-idx="${mealIdx}">
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" value="${meal.time}" class="builder-meal-time text-[11px] text-brand-subtext bg-white border border-brand-border px-2 py-1 rounded-lg w-28 text-center" data-meal-idx="${mealIdx}">
+              <input type="number" value="${meal.cals}" class="builder-meal-cals text-xs font-bold text-brand-dark bg-white border border-brand-border px-2 py-1 rounded-lg w-16 text-center" data-meal-idx="${mealIdx}" title="السعرات">
+              <span class="text-[10px] text-brand-subtext">سعرة</span>
+              <button class="btn-builder-delete-meal text-rose-500 hover:text-rose-700 p-1" data-meal-idx="${mealIdx}" title="حذف الوجبة كاملة">
+                <i data-lucide="x-circle" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <div class="space-y-2">
+            ${itemsInputs}
+          </div>
+          <div class="pt-1 flex justify-end">
+            <button class="btn-builder-add-item text-[11px] font-bold text-brand-primary hover:underline flex items-center gap-1" data-meal-idx="${mealIdx}">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> إضافة صنف للوجبة
+            </button>
+          </div>
+        `;
+
+        mealBox.querySelectorAll('.builder-item-title').forEach(input => {
+          input.addEventListener('change', (e) => {
+            const mIdx = e.target.getAttribute('data-meal-idx');
+            const iIdx = e.target.getAttribute('data-item-idx');
+            appState.dietPlan[mIdx].items[iIdx].title = e.target.value;
+          });
+        });
+
+        mealBox.querySelectorAll('.builder-item-desc').forEach(input => {
+          input.addEventListener('change', (e) => {
+            const mIdx = e.target.getAttribute('data-meal-idx');
+            const iIdx = e.target.getAttribute('data-item-idx');
+            appState.dietPlan[mIdx].items[iIdx].desc = e.target.value;
+          });
+        });
+
+        mealBox.querySelector('.builder-meal-name').addEventListener('change', (e) => {
+          const mIdx = e.target.getAttribute('data-meal-idx');
+          appState.dietPlan[mIdx].name = e.target.value;
+        });
+
+        mealBox.querySelector('.builder-meal-time').addEventListener('change', (e) => {
+          const mIdx = e.target.getAttribute('data-meal-idx');
+          appState.dietPlan[mIdx].time = e.target.value;
+        });
+
+        mealBox.querySelector('.builder-meal-cals').addEventListener('change', (e) => {
+          const mIdx = e.target.getAttribute('data-meal-idx');
+          appState.dietPlan[mIdx].cals = parseInt(e.target.value, 10) || 0;
+        });
+
+        mealBox.querySelector('.btn-builder-delete-meal').addEventListener('click', (e) => {
+          const mIdx = e.currentTarget.getAttribute('data-meal-idx');
+          appState.dietPlan.splice(mIdx, 1);
+          renderBuilderMeals();
+          renderDietMeals();
+          showToast('تم حذف الوجبة بنجاح');
+        });
+
+        mealBox.querySelectorAll('.btn-builder-delete-item').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const mIdx = e.currentTarget.getAttribute('data-meal-idx');
+            const iIdx = e.currentTarget.getAttribute('data-item-idx');
+            appState.dietPlan[mIdx].items.splice(iIdx, 1);
+            renderBuilderMeals();
+            renderDietMeals();
+            showToast('تم حذف الصنف من الوجبة');
+          });
+        });
+
+        mealBox.querySelector('.btn-builder-add-item').addEventListener('click', (e) => {
+          const mIdx = e.currentTarget.getAttribute('data-meal-idx');
+          appState.dietPlan[mIdx].items.push({
+            id: 'it_' + Date.now(),
+            title: 'صنف غذائي جديد (حدد المقدار)',
+            desc: 'حصة إضافية متوازنة',
+            slot: null,
+            icon: 'sparkles'
+          });
+          renderBuilderMeals();
+          renderDietMeals();
+        });
+
+        container.appendChild(mealBox);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderGroceryModal() {
+      const container = document.getElementById('grocery-items-container');
+      const progressLabel = document.getElementById('grocery-progress-label');
+      const progressFill = document.getElementById('grocery-progress-fill');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      let totalItems = 0;
+      let checkedItems = 0;
+
+      appState.groceryCategories.forEach((cat, catIdx) => {
+        const catBox = document.createElement('div');
+        catBox.className = 'space-y-2.5';
+        
+        let itemsHtml = '';
+        cat.items.forEach((item, itemIdx) => {
+          totalItems++;
+          if (item.checked) checkedItems++;
+
+          itemsHtml += `
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-brand-bg/60 hover:bg-brand-secondary/40 cursor-pointer transition-all border border-brand-border/40 text-xs">
+              <div class="flex items-center gap-2.5">
+                <input type="checkbox" class="grocery-check-box accent-brand-primary w-4 h-4 rounded" data-cat="${catIdx}" data-item="${itemIdx}" ${item.checked ? 'checked' : ''}>
+                <span class="${item.checked ? 'line-through text-brand-subtext opacity-60' : 'font-bold text-brand-dark'}">${item.name}</span>
+              </div>
+              <span class="text-[10px] text-brand-subtext font-semibold bg-white px-2 py-0.5 rounded border border-brand-border/60">${item.portion}</span>
+            </label>
+          `;
+        });
+
+        catBox.innerHTML = `
+          <div class="flex items-center gap-1.5 pb-1 border-b border-brand-border/50 text-xs font-bold text-brand-dark">
+            <i data-lucide="${cat.icon}" class="w-4 h-4 ${cat.color}"></i>
+            <span>${cat.title}</span>
+          </div>
+          <div class="space-y-1.5">
+            ${itemsHtml}
+          </div>
+        `;
+
+        container.appendChild(catBox);
+      });
+
+      const pct = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
+      if (progressLabel) progressLabel.textContent = `${pct}% (${checkedItems} من ${totalItems})`;
+      if (progressFill) progressFill.style.width = `${pct}%`;
+
+      container.querySelectorAll('.grocery-check-box').forEach(cb => {
+        cb.addEventListener('change', (e) => {
+          const cIdx = e.target.getAttribute('data-cat');
+          const iIdx = e.target.getAttribute('data-item');
+          appState.groceryCategories[cIdx].items[iIdx].checked = e.target.checked;
+          DB.set('groceryCategories', appState.groceryCategories);
+          renderGroceryModal();
+
+          if (pct === 100 && window.confetti) {
+            window.confetti({ particleCount: 50, spread: 60 });
+            showToast('رائع جداً! تم إكمال شراء جميع مقادير الخطة الأسبوعية 🛒✨');
+          }
+        });
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function initInBodyChart() {
+      const ctx = document.getElementById('inbodyProgressChart');
+      if (!ctx) return;
+
+      const labels = appState.inbodyData.map(d => d.week);
+      const dataPoints = appState.inbodyData.map(d => d[appState.chartMetric]);
+
+      let metricLabel = 'الوزن (كجم)';
+      let color = '#E39E8B';
+      let bgColor = 'rgba(227, 158, 139, 0.15)';
+
+      if (appState.chartMetric === 'bodyFatPercent') {
+        metricLabel = 'نسبة الدهون (%)';
+        color = '#D28671';
+        bgColor = 'rgba(210, 134, 113, 0.15)';
+      } else if (appState.chartMetric === 'muscleMassKg') {
+        metricLabel = 'الكتلة العضلية (كجم)';
+        color = '#10B981';
+        bgColor = 'rgba(16, 185, 129, 0.15)';
+      }
+
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: metricLabel,
+            data: dataPoints,
+            borderColor: color,
+            backgroundColor: bgColor,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.35,
+            pointBackgroundColor: color,
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              rtl: true,
+              labels: {
+                font: { family: 'Cairo', size: 12, weight: 'bold' },
+                color: '#2B0914'
+              }
+            },
+            tooltip: {
+              rtl: true,
+              backgroundColor: '#FFFFFF',
+              titleColor: '#2B0914',
+              bodyColor: '#683648',
+              borderColor: '#E3ABAF',
+              borderWidth: 1,
+              padding: 10,
+              boxPadding: 4,
+              usePointStyle: true,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: ${context.parsed.y}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'Cairo', size: 11 }, color: '#683648' }
+            },
+            y: {
+              grid: { color: 'rgba(227, 171, 175, 0.25)' },
+              ticks: { font: { family: 'Cairo', size: 11 }, color: '#683648' }
+            }
+          }
+        }
+      });
+    }
+
+    function renderPatientFiles() {
+      const container = document.getElementById('patient-files-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      appState.patientFiles.forEach((file) => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-3.5 rounded-2xl bg-brand-bg border border-brand-border/60 hover:border-brand-accent transition-all text-xs';
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white border border-brand-accent/50 flex items-center justify-center text-brand-primary font-bold text-xs uppercase shadow-xs">
+              ${file.type}
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-brand-dark">${file.name}</h5>
+              <p class="text-[11px] text-brand-subtext">${file.date} | ${file.size}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] ${file.tagClass} font-bold px-2 py-0.5 rounded-full">${file.tag}</span>
+            <button class="btn-view-doc p-1.5 text-brand-subtext hover:text-brand-primary" title="معاينة الملف">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+        item.querySelector('.btn-view-doc').addEventListener('click', () => {
+          showToast(`جاري فتح مستند: ${file.name}`);
+        });
+        container.appendChild(item);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chat-messages-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      appState.chatMessages.forEach(msg => {
+        const msgDiv = document.createElement('div');
+        if (msg.sender === 'doctor') {
+          msgDiv.className = 'flex items-start gap-2.5 max-w-[85%]';
+          msgDiv.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-1 shadow-xs">
+              د.ر
+            </div>
+            <div class="bg-white p-4 rounded-2xl rounded-tr-none border border-brand-border/60 shadow-xs space-y-1">
+              <p class="text-xs sm:text-sm text-brand-dark leading-relaxed">${msg.text}</p>
+              <span class="text-[10px] text-brand-subtext font-medium block text-left">${msg.time}</span>
+            </div>
+          `;
+        } else {
+          msgDiv.className = 'flex items-start justify-end gap-2.5 mr-auto max-w-[85%]';
+          msgDiv.innerHTML = `
+            <div class="bg-brand-primary text-white p-4 rounded-2xl rounded-tl-none shadow-xs space-y-1">
+              <p class="text-xs sm:text-sm leading-relaxed">${msg.text}</p>
+              <span class="text-[10px] text-white/80 font-medium block text-left">${msg.time}</span>
+            </div>
+          `;
+        }
+        container.appendChild(msgDiv);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function bindExchangeButtons() {
+      const exchangeModal = document.getElementById('modal-food-exchange');
+      const exchangeCurrentName = document.getElementById('exchange-current-item-name');
+      const exchangeOptionsList = document.getElementById('exchange-options-list');
+
+      document.querySelectorAll('.btn-exchange-food').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const slot = btn.getAttribute('data-slot');
+          const mealId = btn.getAttribute('data-meal');
+          const currentKey = btn.getAttribute('data-current');
+          const data = appState.exchangeDatabase[currentKey];
+
+          if (!data || !exchangeModal) return;
+
+          appState.activeExchangeSlot = { slot, mealId, currentKey, btn };
+          if (exchangeCurrentName) exchangeCurrentName.textContent = data.title;
+          if (exchangeOptionsList) exchangeOptionsList.innerHTML = '';
+
+          data.options.forEach((opt, idx) => {
+            const optDiv = document.createElement('div');
+            optDiv.className = 'p-3 rounded-2xl border border-brand-border hover:border-brand-primary bg-brand-bg/50 hover:bg-brand-secondary/40 cursor-pointer transition-all flex items-center justify-between text-xs';
+            optDiv.innerHTML = `
+              <div>
+                <h5 class="font-bold text-brand-dark">${opt.name}</h5>
+                <p class="text-[11px] text-brand-subtext font-medium mt-0.5">${opt.macros}</p>
+              </div>
+              <input type="radio" name="food_sub" value="${opt.id}" class="accent-brand-primary" ${idx === 0 ? 'checked' : ''}>
+            `;
+
+            optDiv.addEventListener('click', () => {
+              optDiv.querySelector('input').checked = true;
+              appState.selectedSubstitute = opt;
+            });
+
+            if (idx === 0) appState.selectedSubstitute = opt;
+            exchangeOptionsList.appendChild(optDiv);
+          });
+
+          exchangeModal.classList.remove('hidden');
+        });
+      });
+    }
+
+    function runClinicalCalculation() {
+      const age = parseFloat(document.getElementById('calc-age').value) || 28;
+      const weight = parseFloat(document.getElementById('calc-weight').value) || 66.4;
+      const height = parseFloat(document.getElementById('calc-height').value) || 164;
+      const pal = parseFloat(document.getElementById('calc-activity').value) || 1.375;
+      const goalAdj = parseFloat(document.getElementById('calc-goal').value) || -500;
+      const preset = document.getElementById('calc-macro-preset').value;
+
+      const bmr = Math.round((10 * weight) + (6.25 * height) - (5 * age) - 161);
+      const tdee = Math.round(bmr * pal);
+      let targetCals = tdee + goalAdj;
+      if (targetCals < 1200) targetCals = 1200;
+
+      let pRatio = 0.30, cRatio = 0.40, fRatio = 0.30;
+      if (preset === 'balanced') {
+        pRatio = 0.25; cRatio = 0.45; fRatio = 0.30;
+      } else if (preset === 'low-carb') {
+        pRatio = 0.30; cRatio = 0.25; fRatio = 0.45;
+      }
+
+      const proteinG = Math.round((targetCals * pRatio) / 4);
+      const carbsG = Math.round((targetCals * cRatio) / 4);
+      const fatsG = Math.round((targetCals * fRatio) / 9);
+
+      document.getElementById('out-bmr').textContent = bmr.toLocaleString();
+      document.getElementById('out-tdee').textContent = tdee.toLocaleString();
+      document.getElementById('out-target-cals').innerHTML = `${targetCals.toLocaleString()} <span class="text-xs font-normal text-brand-subtext">سعرة/يوم</span>`;
+      
+      document.getElementById('out-protein-g').innerHTML = `${proteinG} جم <span class="text-[10px] text-brand-subtext font-normal">(${proteinG * 4} سعرة)</span>`;
+      document.getElementById('out-carbs-g').innerHTML = `${carbsG} جم <span class="text-[10px] text-brand-subtext font-normal">(${carbsG * 4} سعرة)</span>`;
+      document.getElementById('out-fats-g').innerHTML = `${fatsG} جم <span class="text-[10px] text-brand-subtext font-normal">(${fatsG * 9} سعرة)</span>`;
+
+      showToast('تم تحديث الحسابات السريرية وفق Mifflin-St Jeor بنجاح');
+    }
+
+    function renderPatientsTable(filterQuery = '') {
+      const tbody = document.getElementById('patients-table-body');
+      const badge = document.getElementById('patients-count-badge');
+      if (!tbody) return;
+
+      const q = filterQuery.trim().toLowerCase();
+      const filtered = appState.patientsList.filter(p =>
+        !q || p.name.toLowerCase().includes(q) || (p.phone && p.phone.includes(q)) || p.condition.toLowerCase().includes(q)
+      );
+
+      if (badge) badge.textContent = `${appState.patientsList.length} مشتركات`;
+      tbody.innerHTML = '';
+
+      filtered.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-brand-bg/60 transition-colors';
+        const adhColor = p.adherence >= 90 ? 'text-emerald-600' : 'text-amber-600';
+
+        tr.innerHTML = `
+          <td class="py-3 px-3 flex items-center gap-2 font-bold text-brand-dark">
+            <span class="w-7 h-7 rounded-full bg-brand-secondary text-brand-dark flex items-center justify-center text-[10px] flex-shrink-0 font-bold">${p.initials}</span>
+            <div>
+              <div>${p.name}</div>
+              ${p.phone ? `<div class="text-[10px] text-brand-subtext font-normal">${p.phone}</div>` : ''}
+            </div>
+          </td>
+          <td class="py-3 px-3"><span class="${p.packageClass} px-2 py-0.5 rounded-md font-bold text-[10px]">${p.packageLabel}</span></td>
+          <td class="py-3 px-3 text-brand-dark">${p.initialWeight} &larr; <span class="text-brand-primary font-bold">${p.currentWeight} كجم</span></td>
+          <td class="py-3 px-3"><span class="${p.conditionClass} px-2 py-0.5 rounded-md text-[10px] font-semibold">${p.condition}</span></td>
+          <td class="py-3 px-3 ${adhColor} font-bold">${p.adherence}%</td>
+          <td class="py-3 px-3 text-center">
+            <button class="btn-view-patient-row bg-white hover:bg-brand-secondary text-brand-dark border border-brand-accent px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all">عرض الملف</button>
+          </td>
+        `;
+
+        tr.querySelector('.btn-view-patient-row').addEventListener('click', () => openPatientProfile(p));
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openPatientProfile(patient) {
+      const modal = document.getElementById('modal-patient-profile');
+      if (!modal) return;
+      appState.selectedProfilePatient = patient;
+
+      document.getElementById('profile-modal-avatar').textContent = patient.initials;
+      document.getElementById('profile-modal-name').textContent = patient.name;
+      document.getElementById('profile-modal-pkg').textContent = patient.packageLabel;
+      document.getElementById('profile-modal-bio').textContent = `${patient.age} سنة | ${patient.height} سم`;
+      document.getElementById('profile-modal-weight').innerHTML = `${patient.initialWeight} &larr; ${patient.currentWeight} كجم (الهدف: ${patient.targetWeight} كجم)`;
+      document.getElementById('profile-modal-cond').textContent = patient.condition + (patient.notes ? ` — ${patient.notes}` : '');
+      
+      modal.classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // DOM CONTENT LOADED
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      initInBodyChart();
+      renderDietMeals();
+      renderBuilderMeals();
+      renderPatientFiles();
+      renderChatMessages();
+      renderPatientsTable();
+      renderStoreProducts('all');
+      renderRecipes('all');
+      updateCartBadge();
+
+      initAuthUI();
+
+      setTimeout(() => {
+        if (window.CloudDB && window.CloudDB.isReady()) {
+          window.CloudDB.listenPatients((cloudPatients) => {
+            appState.patientsList = cloudPatients;
+            DB.set('patientsList', cloudPatients);
+            renderPatientsTable();
+          });
+
+          window.CloudDB.listenChat((cloudMsgs) => {
+            appState.chatMessages = cloudMsgs;
+            DB.set('chatMessages', cloudMsgs);
+            renderChatMessages();
+          });
+
+          const targetPhone = currentSession ? currentSession.phone : '01012345678';
+          window.CloudDB.listenDietPlan(targetPhone, (cloudPlan) => {
+            appState.dietPlan = cloudPlan;
+            DB.set('dietPlan', cloudPlan);
+            renderDietMeals();
+            renderBuilderMeals();
+          });
+        }
+      }, 500);
+
+      const authTabPatient = document.getElementById('auth-tab-patient');
+      const authTabDoctor = document.getElementById('auth-tab-doctor');
+      const formPatientLogin = document.getElementById('form-patient-login');
+      const formDoctorLogin = document.getElementById('form-doctor-login');
+
+      if (authTabPatient && authTabDoctor) {
+        authTabPatient.addEventListener('click', () => {
+          authTabPatient.className = "flex-1 py-2.5 rounded-xl transition-all bg-brand-primary text-white shadow-xs flex items-center justify-center gap-1.5";
+          authTabDoctor.className = "flex-1 py-2.5 rounded-xl transition-all text-brand-subtext hover:text-brand-primary flex items-center justify-center gap-1.5";
+          formPatientLogin.classList.remove('hidden');
+          formDoctorLogin.classList.add('hidden');
+        });
+
+        authTabDoctor.addEventListener('click', () => {
+          authTabDoctor.className = "flex-1 py-2.5 rounded-xl transition-all bg-brand-primary text-white shadow-xs flex items-center justify-center gap-1.5";
+          authTabPatient.className = "flex-1 py-2.5 rounded-xl transition-all text-brand-subtext hover:text-brand-primary flex items-center justify-center gap-1.5";
+          formDoctorLogin.classList.remove('hidden');
+          formPatientLogin.classList.add('hidden');
+        });
+      }
+
+      const btnSubmitPatientLogin = document.getElementById('btn-submit-patient-login');
+      if (btnSubmitPatientLogin) {
+        btnSubmitPatientLogin.addEventListener('click', () => {
+          const phoneInput = document.getElementById('login-patient-phone').value.trim();
+          const foundPatient = appState.patientsList.find(p => p.phone === phoneInput);
+
+          if (foundPatient) {
+            currentSession = {
+              role: 'patient',
+              phone: foundPatient.phone,
+              name: foundPatient.name
+            };
+            DB.set('currentSession', currentSession);
+            showToast(`أهلاً بكِ مجدداً يا ${foundPatient.name} 🌸`);
+            initAuthUI();
+          } else {
+            showToast('رقم الموبايل غير مسجل في قاعدة بيانات العيادة. يرجى التواصل مع الطبيبة.', 'error');
+          }
+        });
+      }
+
+      const btnSubmitDoctorLogin = document.getElementById('btn-submit-doctor-login');
+      if (btnSubmitDoctorLogin) {
+        btnSubmitDoctorLogin.addEventListener('click', () => {
+          const email = document.getElementById('login-doctor-email').value.trim();
+          const pin = document.getElementById('login-doctor-pin').value.trim();
+
+          if (email === AUTH_CONFIG.DOCTOR_EMAIL && pin === AUTH_CONFIG.DOCTOR_PIN) {
+            currentSession = {
+              role: 'doctor',
+              email: email
+            };
+            DB.set('currentSession', currentSession);
+            showToast('مرحباً د. راما، تم تسجيل الدخول إلى اللوحة السريرية 🩺');
+            initAuthUI();
+          } else {
+            showToast('بيانات الدخول غير صحيحة، يرجى التحقق من الرمز السري', 'error');
+          }
+        });
+      }
+
+      const btnLogout = document.getElementById('btn-logout');
+      if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+          currentSession = null;
+          DB.set('currentSession', null);
+          showToast('تم تسجيل الخروج بنجاح');
+          initAuthUI();
+        });
+      }
+
+      const patientSubTabs = document.querySelectorAll('.patient-subtab');
+      const patientPanes = document.querySelectorAll('.patient-content-pane');
+
+      patientSubTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          patientSubTabs.forEach(t => {
+            t.className = 'patient-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary';
+          });
+          tab.className = 'patient-subtab active-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 bg-brand-primary text-white shadow-xs';
+
+          const targetId = tab.getAttribute('data-target');
+          patientPanes.forEach(pane => pane.classList.add('hidden'));
+          const targetPane = document.getElementById(targetId);
+          if (targetPane) targetPane.classList.remove('hidden');
+
+          if (targetId === 'tab-inbody') {
+            setTimeout(initInBodyChart, 50);
+          }
+        });
+      });
+
+      const docSubTabs = document.querySelectorAll('.doctor-subtab');
+      const docPanes = document.querySelectorAll('.doctor-content-pane');
+
+      docSubTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          docSubTabs.forEach(t => {
+            t.className = 'doctor-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 text-brand-subtext hover:bg-brand-secondary';
+          });
+          tab.className = 'doctor-subtab active-doc-subtab px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 bg-brand-primary text-white shadow-xs';
+
+          const targetId = tab.getAttribute('data-target');
+          docPanes.forEach(pane => pane.classList.add('hidden'));
+          const targetPane = document.getElementById(targetId);
+          if (targetPane) targetPane.classList.remove('hidden');
+        });
+      });
+
+      document.querySelectorAll('.recipe-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.recipe-filter').forEach(b => {
+            b.className = 'recipe-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary';
+          });
+          btn.className = 'recipe-filter active px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-xs';
+          renderRecipes(btn.getAttribute('data-category'));
+        });
+      });
+
+      document.querySelectorAll('.store-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.store-filter').forEach(b => {
+            b.className = 'store-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-brand-subtext border border-brand-border hover:bg-brand-secondary';
+          });
+          btn.className = 'store-filter active px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-xs';
+          renderStoreProducts(btn.getAttribute('data-category'));
+        });
+      });
+
+      const btnOpenCart = document.getElementById('btn-open-cart');
+      const modalCart = document.getElementById('modal-cart');
+      const btnCloseCart = document.getElementById('btn-close-cart-modal');
+      const btnClearCart = document.getElementById('btn-clear-cart');
+
+      if (btnOpenCart && modalCart) {
+        btnOpenCart.addEventListener('click', () => {
+          renderCartModal();
+          modalCart.classList.remove('hidden');
+        });
+      }
+      if (btnCloseCart && modalCart) {
+        btnCloseCart.addEventListener('click', () => modalCart.classList.add('hidden'));
+      }
+      if (btnClearCart) {
+        btnClearCart.addEventListener('click', () => {
+          appState.cart = [];
+          DB.set('cart', []);
+          updateCartBadge();
+          renderCartModal();
+          showToast('تم تفريغ سلة المشتريات بالكامل');
+        });
+      }
+
+      const btnCheckoutCart = document.getElementById('btn-checkout-cart');
+      const modalCheckout = document.getElementById('modal-checkout');
+      const btnCloseCheckout = document.getElementById('btn-close-checkout-modal');
+      const btnCancelCheckout = document.getElementById('btn-cancel-checkout');
+      const btnConfirmOrder = document.getElementById('btn-confirm-order');
+
+      if (btnCheckoutCart && modalCheckout) {
+        btnCheckoutCart.addEventListener('click', () => {
+          if (appState.cart.length === 0) {
+            showToast('السلة فارغة! اختاري منتجاً من المتجر أولاً', 'info');
+            return;
+          }
+          if (modalCart) modalCart.classList.add('hidden');
+          const totalVal = appState.cart.reduce((s, i) => s + (i.price * i.quantity), 0);
+          document.getElementById('checkout-final-total').textContent = `${totalVal.toLocaleString()} ج.م`;
+          modalCheckout.classList.remove('hidden');
+        });
+      }
+      if (btnCloseCheckout && modalCheckout) {
+        btnCloseCheckout.addEventListener('click', () => modalCheckout.classList.add('hidden'));
+      }
+      if (btnCancelCheckout && modalCheckout) {
+        btnCancelCheckout.addEventListener('click', () => modalCheckout.classList.add('hidden'));
+      }
+
+      if (btnConfirmOrder && modalCheckout) {
+        btnConfirmOrder.addEventListener('click', () => {
+          const custName = document.getElementById('checkout-cust-name').value.trim() || 'سارة الأحمد';
+          const custPhone = document.getElementById('checkout-cust-phone').value.trim() || 'غير محدد';
+          const custAddress = document.getElementById('checkout-cust-address').value.trim() || 'استلام مباشر بالعيادة';
+          const deliveryMethod = document.getElementById('checkout-delivery-method').selectedOptions[0].text;
+          const payMethodEl = document.querySelector('input[name="pay_method"]:checked');
+          const payMethod = payMethodEl ? payMethodEl.value : 'إنستاباي (تحويل لحظي)';
+          const totalAmount = document.getElementById('checkout-final-total').textContent;
+
+          let itemsText = "";
+          if (appState.cart.length > 0) {
+            itemsText = appState.cart.map(i => `• ${i.title} (${i.quantity} قطعة - ${(i.price * i.quantity).toLocaleString()} ج.م)`).join('\n');
+          } else {
+            itemsText = `• حجز باقة استشارية سريرية (${totalAmount})`;
+          }
+
+          const message = 
+`🌸 *طلب جديد - عيادة د. راما سفقلو* 🌸
+------------------------------------
+👤 *اسم المشتركة:* ${custName}
+📞 *رقم الموبايل:* ${custPhone}
+📍 *العنوان:* ${custAddress}
+🚚 *طريقة التوصيل:* ${deliveryMethod}
+💳 *طريقة الدفع:* ${payMethod}
+💰 *المبلغ المستحق:* ${totalAmount}
+------------------------------------
+🛒 *تفاصيل الطلب / الباقة:*
+${itemsText}
+------------------------------------
+يرجى تأكيد استلام المعاملة وتزويدي بالتفاصيل. شكراً دكتورة راما! ✨`;
+
+          const waUrl = `https://wa.me/${CLINIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+          window.open(waUrl, '_blank');
+
+          modalCheckout.classList.add('hidden');
+          appState.cart = [];
+          DB.set('cart', []);
+          updateCartBadge();
+          
+          if (window.confetti) {
+            window.confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+          }
+          showToast('تم تجهيز طلبك ونقلك إلى واتساب العيادة لتأكيد المعاملة 🌸');
+        });
+      }
+
+      document.querySelectorAll('.btn-book-package').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const name = btn.getAttribute('data-name');
+          const price = btn.getAttribute('data-price');
+          if (modalCheckout) {
+            document.getElementById('checkout-final-total').textContent = `${parseInt(price).toLocaleString()} ج.م (${name})`;
+            modalCheckout.classList.remove('hidden');
+          }
+        });
+      });
+
+      const btnOpenGrocery = document.getElementById('btn-open-grocery-list');
+      const modalGrocery = document.getElementById('modal-grocery');
+      const btnCloseGrocery = document.getElementById('btn-close-grocery-modal');
+      const btnResetGrocery = document.getElementById('btn-reset-grocery');
+      const btnCopyGrocery = document.getElementById('btn-copy-grocery');
+
+      if (btnOpenGrocery && modalGrocery) {
+        btnOpenGrocery.addEventListener('click', () => {
+          renderGroceryModal();
+          modalGrocery.classList.remove('hidden');
+        });
+      }
+      if (btnCloseGrocery && modalGrocery) {
+        btnCloseGrocery.addEventListener('click', () => modalGrocery.classList.add('hidden'));
+      }
+      if (btnResetGrocery) {
+        btnResetGrocery.addEventListener('click', () => {
+          appState.groceryCategories.forEach(cat => cat.items.forEach(it => it.checked = false));
+          DB.set('groceryCategories', appState.groceryCategories);
+          renderGroceryModal();
+          showToast('تمت إعادة ضبط قائمة المشتريات');
+        });
+      }
+      if (btnCopyGrocery) {
+        btnCopyGrocery.addEventListener('click', () => {
+          let text = "🛒 قائمة مشتريات الأسبوع - عيادة د. راما سفقلو:\n\n";
+          appState.groceryCategories.forEach(cat => {
+            text += `📌 ${cat.title}:\n`;
+            cat.items.forEach(it => {
+              text += ` [${it.checked ? '✔️' : ' '}] ${it.name} (${it.portion})\n`;
+            });
+            text += "\n";
+          });
+          
+          fallbackCopyText(text);
+        });
+      }
+
+      function fallbackCopyText(text) {
+        const tempArea = document.createElement("textarea");
+        tempArea.value = text;
+        document.body.appendChild(tempArea);
+        tempArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempArea);
+        showToast('تم نسخ قائمة المشتريات إلى الحافظة بنجاح 📋');
+      }
+
+      const btnBuilderAddMeal = document.getElementById('btn-builder-add-meal');
+      const btnBuilderSavePlan = document.getElementById('btn-builder-save-plan');
+
+      if (btnBuilderAddMeal) {
+        btnBuilderAddMeal.addEventListener('click', () => {
+          const num = appState.dietPlan.length + 1;
+          appState.dietPlan.push({
+            id: 'meal_' + Date.now(),
+            name: `وجبة سناك إضافية ${num}`,
+            time: '5:00 - 6:00 م',
+            cals: 150,
+            protein: 10,
+            items: [
+              {
+                id: 'it_' + Date.now(),
+                title: 'حفنة مكسرات نيئة (20 جم) أو ثمرة فاكهة',
+                desc: 'دهون صحية وألياف للشبع (120 سعرة | 3g P | 10g F)',
+                slot: null,
+                icon: 'sparkles'
+              }
+            ]
+          });
+          renderBuilderMeals();
+          renderDietMeals();
+          showToast('تمت إضافة وجبة جديدة إلى المحرر');
+        });
+      }
+
+      if (btnBuilderSavePlan) {
+        btnBuilderSavePlan.addEventListener('click', () => {
+          DB.set('dietPlan', appState.dietPlan);
+          renderDietMeals();
+          
+          if (window.CloudDB && window.CloudDB.isReady()) {
+            const targetPhone = currentSession ? currentSession.phone : '01012345678';
+            window.CloudDB.saveDietPlan(targetPhone, appState.dietPlan);
+          }
+
+          if (window.confetti) {
+            window.confetti({ particleCount: 60, spread: 60 });
+          }
+          showToast('تم حفظ الخطة ونشرها سحابياً للمشتركة ✨');
+        });
+      }
+
+      const filterWeight = document.getElementById('chart-filter-weight');
+      const filterFat = document.getElementById('chart-filter-fat');
+      const filterMuscle = document.getElementById('chart-filter-muscle');
+
+      function updateChartFilter(metricKey, activeBtn) {
+        appState.chartMetric = metricKey;
+        [filterWeight, filterFat, filterMuscle].forEach(btn => {
+          if (btn) btn.className = 'chart-filter-btn px-3 py-1.5 rounded-xl text-brand-subtext hover:text-brand-primary';
+        });
+        if (activeBtn) activeBtn.className = 'chart-filter-btn px-3 py-1.5 rounded-xl bg-brand-primary text-white shadow-xs';
+        initInBodyChart();
+      }
+
+      if (filterWeight) filterWeight.addEventListener('click', () => updateChartFilter('weightKg', filterWeight));
+      if (filterFat) filterFat.addEventListener('click', () => updateChartFilter('bodyFatPercent', filterFat));
+      if (filterMuscle) filterMuscle.addEventListener('click', () => updateChartFilter('muscleMassKg', filterMuscle));
+
+      const btnAdd250 = document.getElementById('btn-add-water-250');
+      const btnAdd500 = document.getElementById('btn-add-water-500');
+      const btnResetWater = document.getElementById('btn-reset-water');
+      const waterCurrentAmount = document.getElementById('water-current-amount');
+      const waterProgressBar = document.getElementById('water-progress-bar');
+      const waterPercentBadge = document.getElementById('water-percent-badge');
+      const waterRemainingLabel = document.getElementById('water-remaining-label');
+
+      function updateWaterUI() {
+        const pct = Math.min(100, Math.round((appState.waterMl / appState.targetWaterMl) * 100));
+        const rem = Math.max(0, appState.targetWaterMl - appState.waterMl);
+        
+        if (waterCurrentAmount) waterCurrentAmount.innerHTML = `${appState.waterMl.toLocaleString()} <span class="text-sm font-normal text-brand-subtext">مل</span>`;
+        if (waterProgressBar) waterProgressBar.style.width = `${pct}%`;
+        if (waterPercentBadge) waterPercentBadge.textContent = `${pct}%`;
+        if (waterRemainingLabel) waterRemainingLabel.textContent = rem > 0 ? `متبقي ${rem.toLocaleString()} مل للهدف` : 'تم إتمام الهدف اليومي!';
+
+        DB.set('waterMl', appState.waterMl);
+
+        if (pct >= 100 && window.confetti) {
+          window.confetti({ particleCount: 60, spread: 55, origin: { y: 0.7 } });
+          showToast('أحسنتِ يا سارة! تم تحقيق هدف شرب الماء اليومي بالكامل 💧🎉');
+        }
+      }
+
+      if (btnAdd250) {
+        btnAdd250.addEventListener('click', () => {
+          appState.waterMl += 250;
+          updateWaterUI();
+          showToast('تم تسجيل +250 مل ماء 💧');
+        });
+      }
+      if (btnAdd500) {
+        btnAdd500.addEventListener('click', () => {
+          appState.waterMl += 500;
+          updateWaterUI();
+          showToast('تم تسجيل +500 مل ماء 💧');
+        });
+      }
+      if (btnResetWater) {
+        btnResetWater.addEventListener('click', () => {
+          appState.waterMl = 0;
+          updateWaterUI();
+          showToast('تمت إعادة ضبط عداد الماء');
+        });
+      }
+
+      const measureModal = document.getElementById('modal-new-measure');
+      const btnOpenMeasure = document.getElementById('btn-open-inbody-modal');
+      const btnQuickMeasure = document.getElementById('btn-quick-new-measure');
+      const btnCloseMeasure = document.getElementById('btn-close-measure-modal');
+      const btnCancelMeasure = document.getElementById('btn-cancel-measure');
+      const btnSaveMeasure = document.getElementById('btn-save-measure');
+
+      function openMeasureModal() {
+        if (measureModal) measureModal.classList.remove('hidden');
+      }
+
+      if (btnOpenMeasure) btnOpenMeasure.addEventListener('click', openMeasureModal);
+      if (btnQuickMeasure) btnQuickMeasure.addEventListener('click', openMeasureModal);
+      if (btnCloseMeasure) btnCloseMeasure.addEventListener('click', () => measureModal.classList.add('hidden'));
+      if (btnCancelMeasure) btnCancelMeasure.addEventListener('click', () => measureModal.classList.add('hidden'));
+
+      if (btnSaveMeasure) {
+        btnSaveMeasure.addEventListener('click', () => {
+          const newWeight = parseFloat(document.getElementById('input-new-weight').value) || 65.9;
+          const newFat = parseFloat(document.getElementById('input-new-fat').value) || 26.3;
+          const newMuscle = parseFloat(document.getElementById('input-new-muscle').value) || 24.3;
+
+          const nextWeekNum = appState.inbodyData.length + 1;
+          const newRecord = {
+            week: `الأسبوع ${nextWeekNum}`,
+            weightKg: newWeight,
+            bodyFatPercent: newFat,
+            muscleMassKg: newMuscle
+          };
+
+          appState.inbodyData.push(newRecord);
+          DB.set('inbodyData', appState.inbodyData);
+
+          if (window.CloudDB && window.CloudDB.isReady()) {
+            const targetPhone = currentSession ? currentSession.phone : '01012345678';
+            window.CloudDB.saveInBodyRecords(targetPhone, appState.inbodyData);
+          }
+
+          document.getElementById('metric-current-weight').innerHTML = `${newWeight} <span class="text-xs font-normal text-brand-subtext">كجم</span>`;
+          document.getElementById('metric-body-fat').innerHTML = `${newFat} <span class="text-xs font-normal text-brand-subtext">%</span>`;
+          document.getElementById('metric-muscle-mass').innerHTML = `${newMuscle} <span class="text-xs font-normal text-brand-subtext">كجم</span>`;
+          const heroW = document.getElementById('hero-current-weight');
+          if (heroW) heroW.textContent = newWeight;
+
+          initInBodyChart();
+          measureModal.classList.add('hidden');
+
+          if (window.confetti) {
+            window.confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+          }
+          showToast('تم حفظ القياسات وتحديث مسار الانخفاض في الرسم البياني 🎉');
+        });
+      }
+
+      const chatSend = document.getElementById('btn-chat-send');
+      const chatInput = document.getElementById('chat-input-text');
+      const btnChatAttach = document.getElementById('btn-chat-attach');
+      const chatFileInput = document.getElementById('chat-file-input');
+      const btnChatMic = document.getElementById('btn-chat-mic');
+
+      function sendChatMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        const senderRole = currentSession && currentSession.role === 'doctor' ? 'doctor' : 'patient';
+
+        const newMsg = {
+          sender: senderRole,
+          text: text,
+          time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+        };
+
+        appState.chatMessages.push(newMsg);
+        DB.set('chatMessages', appState.chatMessages);
+        renderChatMessages();
+        chatInput.value = '';
+
+        if (window.CloudDB && window.CloudDB.isReady()) {
+          window.CloudDB.sendChatMessage(newMsg);
+        }
+
+        if (!window.CloudDB || !window.CloudDB.isReady()) {
+          if (senderRole === 'patient') {
+            setTimeout(() => {
+              const docReply = {
+                sender: 'doctor',
+                text: 'وصلت رسالتكِ يا سارة 🌸 اطلعت على تفاصيل استفساركِ وسأقوم بمراجعة وتعديل خطتك بما يناسب هدفك في استشارتنا القادمة بالعيادة!',
+                time: 'الآن'
+              };
+              appState.chatMessages.push(docReply);
+              DB.set('chatMessages', appState.chatMessages);
+              renderChatMessages();
+            }, 1200);
+          }
+        }
+      }
+
+      if (chatSend) chatSend.addEventListener('click', sendChatMessage);
+      if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') sendChatMessage();
+        });
+      }
+
+      if (btnChatAttach && chatFileInput) {
+        btnChatAttach.addEventListener('click', () => chatFileInput.click());
+        chatFileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const isImg = file.type.startsWith('image/');
+            const icon = isImg ? '🖼️ صورة مرفقة' : '📄 ملف مستند';
+            
+            const newMsg = {
+              sender: currentSession && currentSession.role === 'doctor' ? 'doctor' : 'patient',
+              text: `${icon}: ${file.name} (تم الرفع للمراجعة الطبية)`,
+              time: 'الآن'
+            };
+            
+            appState.chatMessages.push(newMsg);
+            DB.set('chatMessages', appState.chatMessages);
+            renderChatMessages();
+            
+            if (window.CloudDB && window.CloudDB.isReady()) {
+              window.CloudDB.sendChatMessage(newMsg);
+            }
+
+            showToast(`تم إرفاق "${file.name}" في المحادثة بنجاح`);
+          }
+        });
+      }
+
+      if (btnChatMic) {
+        btnChatMic.addEventListener('click', () => {
+          if (!isRecordingAudio) {
+            isRecordingAudio = true;
+            btnChatMic.classList.add('text-rose-600', 'animate-pulse');
+            showToast('جاري تسجيل الملاحظة الصوتية... اضغطي مرة أخرى للإرسال', 'info');
+          } else {
+            isRecordingAudio = false;
+            btnChatMic.classList.remove('text-rose-600', 'animate-pulse');
+            
+            const audioMsg = {
+              sender: currentSession && currentSession.role === 'doctor' ? 'doctor' : 'patient',
+              text: '🎤 ملاحظة صوتية مسجلة (0:14 ثانية)',
+              time: 'الآن'
+            };
+            
+            appState.chatMessages.push(audioMsg);
+            DB.set('chatMessages', appState.chatMessages);
+            renderChatMessages();
+
+            if (window.CloudDB && window.CloudDB.isReady()) {
+              window.CloudDB.sendChatMessage(audioMsg);
+            }
+
+            showToast('تم إرسال التسجيل الصوتي بنجاح 🎙️');
+          }
+        });
+      }
+
+      const btnQuickConsult = document.getElementById('btn-quick-consult');
+      if (btnQuickConsult) {
+        btnQuickConsult.addEventListener('click', () => {
+          const chatSubTab = document.querySelector('[data-target="tab-chat"]');
+          if (chatSubTab) chatSubTab.click();
+        });
+      }
+
+      const btnPrint = document.getElementById('btn-print-diet-plan');
+      if (btnPrint) {
+        btnPrint.addEventListener('click', () => window.print());
+      }
+
+      const btnRecalc = document.getElementById('btn-recalc');
+      const btnApplyPlan = document.getElementById('btn-apply-calculated-plan');
+      if (btnRecalc) btnRecalc.addEventListener('click', runClinicalCalculation);
+      if (btnApplyPlan) {
+        btnApplyPlan.addEventListener('click', () => {
+          showToast('تم اعتماد وتطبيق الخطة الجديدة على ملف المشتركة بنجاح');
+          if (window.confetti) window.confetti({ particleCount: 50, spread: 60 });
+        });
+      }
+
+      const btnUploadReport = document.getElementById('btn-upload-report');
+      const realFileInput = document.getElementById('real-file-input');
+
+      if (btnUploadReport && realFileInput) {
+        btnUploadReport.addEventListener('click', () => realFileInput.click());
+        realFileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            const newFileObj = {
+              name: file.name,
+              size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+              date: '28 أكتوبر 2026',
+              type: ext === 'pdf' ? 'pdf' : 'image',
+              tag: 'تقرير جديد للمراجعة',
+              tagClass: 'bg-brand-secondary text-brand-dark'
+            };
+            appState.patientFiles.unshift(newFileObj);
+            DB.set('patientFiles', appState.patientFiles);
+            renderPatientFiles();
+            showToast(`تم رفع المستند "${file.name}" وإضافته لملفات المشتركة بنجاح 📄`);
+          }
+        });
+      }
+
+      const btnConfirmExchange = document.getElementById('btn-confirm-exchange');
+      const btnCloseExchange = document.getElementById('btn-close-exchange-modal');
+      const btnCancelExchange = document.getElementById('btn-cancel-exchange');
+      const exchangeModal = document.getElementById('modal-food-exchange');
+
+      if (btnCloseExchange && exchangeModal) btnCloseExchange.addEventListener('click', () => exchangeModal.classList.add('hidden'));
+      if (btnCancelExchange && exchangeModal) btnCancelExchange.addEventListener('click', () => exchangeModal.classList.add('hidden'));
+
+      if (btnConfirmExchange && exchangeModal) {
+        btnConfirmExchange.addEventListener('click', () => {
+          if (appState.selectedSubstitute && appState.activeExchangeSlot) {
+            const { mealId, slot } = appState.activeExchangeSlot;
+            const targetMeal = appState.dietPlan.find(m => m.id === mealId);
+            if (targetMeal) {
+              const targetItem = targetMeal.items.find(i => i.slot === slot);
+              if (targetItem) {
+                targetItem.title = appState.selectedSubstitute.title;
+                targetItem.desc = `حصة بديلة متكافئة (${appState.selectedSubstitute.macros})`;
+                renderDietMeals();
+                renderBuilderMeals();
+                DB.set('dietPlan', appState.dietPlan);
+
+                if (window.CloudDB && window.CloudDB.isReady()) {
+                  const targetPhone = currentSession ? currentSession.phone : '01012345678';
+                  window.CloudDB.saveDietPlan(targetPhone, appState.dietPlan);
+                }
+              }
+            }
+            exchangeModal.classList.add('hidden');
+            showToast(`تم استبدال الصنف بنجاح إلى: ${appState.selectedSubstitute.title}`);
+          }
+        });
+      }
+
+      const btnCloseProfileModal = document.getElementById('btn-close-profile-modal');
+      const btnCloseProfileBtn = document.getElementById('btn-close-profile-btn');
+      const modalPatientProfile = document.getElementById('modal-patient-profile');
+      const btnProfileToCalc = document.getElementById('btn-profile-to-calc');
+
+      if (btnCloseProfileModal && modalPatientProfile) btnCloseProfileModal.addEventListener('click', () => modalPatientProfile.classList.add('hidden'));
+      if (btnCloseProfileBtn && modalPatientProfile) btnCloseProfileBtn.addEventListener('click', () => modalPatientProfile.classList.add('hidden'));
+
+      if (btnProfileToCalc && modalPatientProfile) {
+        btnProfileToCalc.addEventListener('click', () => {
+          if (appState.selectedProfilePatient) {
+            document.getElementById('calc-age').value = appState.selectedProfilePatient.age;
+            document.getElementById('calc-weight').value = appState.selectedProfilePatient.currentWeight;
+            document.getElementById('calc-height').value = appState.selectedProfilePatient.height;
+            runClinicalCalculation();
+          }
+          modalPatientProfile.classList.add('hidden');
+          const calcTab = document.querySelector('[data-target="doc-tab-calc"]');
+          if (calcTab) calcTab.click();
+        });
+      }
+
+      const btnDocNewPatient = document.getElementById('btn-doc-new-patient');
+      const btnDocNewPatientInline = document.getElementById('btn-doc-new-patient-inline');
+      const modalNewPatient = document.getElementById('modal-new-patient');
+      const btnCloseNewPatient = document.getElementById('btn-close-new-patient-modal');
+      const btnCancelNewPatient = document.getElementById('btn-cancel-new-patient');
+      const btnSaveNewPatient = document.getElementById('btn-save-new-patient');
+      const inputPatientSearch = document.getElementById('input-patient-search');
+
+      function openNewPatientModal() {
+        if (modalNewPatient) modalNewPatient.classList.remove('hidden');
+      }
+
+      if (btnDocNewPatient) btnDocNewPatient.addEventListener('click', openNewPatientModal);
+      if (btnDocNewPatientInline) btnDocNewPatientInline.addEventListener('click', openNewPatientModal);
+      if (btnCloseNewPatient && modalNewPatient) btnCloseNewPatient.addEventListener('click', () => modalNewPatient.classList.add('hidden'));
+      if (btnCancelNewPatient && modalNewPatient) btnCancelNewPatient.addEventListener('click', () => modalNewPatient.classList.add('hidden'));
+
+      if (btnSaveNewPatient && modalNewPatient) {
+        btnSaveNewPatient.addEventListener('click', () => {
+          const name = document.getElementById('new-pat-name').value.trim() || 'مشتركة جديدة';
+          const phone = document.getElementById('new-pat-phone').value.trim() || '010XXXXXXXX';
+          const age = parseInt(document.getElementById('new-pat-age').value, 10) || 26;
+          const height = parseFloat(document.getElementById('new-pat-height').value) || 162;
+          const weight = parseFloat(document.getElementById('new-pat-weight').value) || 74.5;
+          const target = parseFloat(document.getElementById('new-pat-target').value) || 62.0;
+          const pkgKey = document.getElementById('new-pat-package').value;
+          const condition = document.getElementById('new-pat-condition').value;
+          const notes = document.getElementById('new-pat-notes').value.trim();
+
+          const parts = name.split(' ').filter(Boolean);
+          const initials = parts.length >= 2 ? `${parts[0][0]}.${parts[1][0]}` : `${name.slice(0, 2)}`;
+
+          let pkgLabel = 'هجين (عيادة + أونلاين)';
+          let pkgClass = 'bg-brand-secondary text-brand-dark';
+          if (pkgKey === 'vip') {
+            pkgLabel = 'باقة 3 أشهر عرائس';
+            pkgClass = 'bg-purple-100 text-purple-900';
+          } else if (pkgKey === 'online') {
+            pkgLabel = 'أونلاين شهري';
+            pkgClass = 'bg-sky-100 text-sky-900';
+          }
+
+          let condClass = 'bg-amber-100 text-amber-900';
+          if (condition.includes('سليمة')) condClass = 'bg-emerald-100 text-emerald-900';
+          else if (condition.includes('تكيس')) condClass = 'bg-rose-100 text-rose-900';
+
+          const newPat = {
+            id: 'p_' + Date.now(),
+            name,
+            initials,
+            phone,
+            age,
+            height,
+            initialWeight: weight,
+            currentWeight: weight,
+            targetWeight: target,
+            packageKey: pkgKey,
+            packageLabel: pkgLabel,
+            packageClass: pkgClass,
+            condition,
+            conditionClass: condClass,
+            adherence: 100,
+            notes
+          };
+
+          appState.patientsList.unshift(newPat);
+          DB.set('patientsList', appState.patientsList);
+          renderPatientsTable();
+
+          if (window.CloudDB && window.CloudDB.isReady()) {
+            window.CloudDB.savePatient(newPat);
+          }
+
+          modalNewPatient.classList.add('hidden');
+          const patTabBtn = document.querySelector('[data-target="doc-tab-patients"]');
+          if (patTabBtn) patTabBtn.click();
+
+          if (window.confetti) window.confetti({ particleCount: 65, spread: 60 });
+          showToast(`تم تسجيل المشتركة "${name}" ومزامنتها سحابياً بنجاح 🌸`);
+        });
+      }
+
+      if (inputPatientSearch) {
+        inputPatientSearch.addEventListener('input', (e) => {
+          renderPatientsTable(e.target.value);
+        });
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const pwaInstallBtn = document.getElementById('pwa-install-btn');
+        if (pwaInstallBtn) pwaInstallBtn.classList.remove('hidden');
+      });
+
+      const pwaDialog = document.getElementById('pwa-install-dialog');
+      const pwaInstallBtn = document.getElementById('pwa-install-btn');
+      const btnPwaDismiss = document.getElementById('btn-pwa-dismiss');
+      const btnPwaConfirm = document.getElementById('btn-pwa-confirm');
+
+      if (pwaInstallBtn) {
+        pwaInstallBtn.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+              showToast('شكراً لتثبيت تطبيق عيادة د. راما سفقلو! 🌸');
+            }
+            deferredPrompt = null;
+          } else if (pwaDialog) {
+            pwaDialog.classList.remove('hidden');
+          }
+        });
+      }
+
+      if (btnPwaDismiss && pwaDialog) btnPwaDismiss.addEventListener('click', () => pwaDialog.classList.add('hidden'));
+      if (btnPwaConfirm && pwaDialog) {
+        btnPwaConfirm.addEventListener('click', () => {
+          pwaDialog.classList.add('hidden');
+          showToast('تم تثبيت تطبيق د. راما سفقلو بنجاح على شاشتك الرئيسية! 📱✨');
+        });
+      }
+
+      const btnSaveDiary = document.getElementById('btn-save-diary');
+      const inputDiary = document.getElementById('input-diary-note');
+      if (btnSaveDiary && inputDiary) {
+        btnSaveDiary.addEventListener('click', () => {
+          if (inputDiary.value.trim()) {
+            showToast('تم حفظ ملاحظة الالتزام اليومية بنجاح 🌸');
+            inputDiary.value = '';
+          }
+        });
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+
+  <!-- تسجيل Service Worker للعمل أوفلاين وتثبيت PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('✅ ServiceWorker Registered Successfully:', reg.scope))
+          .catch((err) => console.warn('⚠️ ServiceWorker Failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
